@@ -17,7 +17,14 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.net.curl.CURLCode;
 import flixel.graphics.FlxGraphic;
+import flixel.addons.display.FlxRuntimeShader;
+import openfl.filters.BitmapFilter;
+import openfl.filters.ShaderFilter;
+import openfl.display.BlendMode;
+import openfl.Lib;
+import Shaders;
 import WeekData;
+import WindowsData;
 
 using StringTools;
 
@@ -49,10 +56,16 @@ class StoryMenuState extends MusicBeatState
 
 	var loadedWeeks:Array<WeekData> = [];
 
+	var chromeValue:Float = 0;
+	var shaders:Array<ShaderEffect> = [];
+	var chrom:ChromaticAberrationEffect;
+
 	override function create()
 	{
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
+
+		Lib.application.window.title = Main.appTitle + ' - ' + 'Story Mode';
 
 		PlayState.isStoryMode = true;
 		WeekData.reloadWeekFiles(true);
@@ -63,7 +76,7 @@ class StoryMenuState extends MusicBeatState
 		scoreText.setFormat("VCR OSD Mono", 32);
 
 		txtWeekTitle = new FlxText(FlxG.width * 0.7, 10, 0, "", 32);
-		txtWeekTitle.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, RIGHT);
+		txtWeekTitle.setFormat(Paths.font("snap.ttf"), 32, FlxColor.WHITE, RIGHT);
 		txtWeekTitle.alpha = 0.7;
 
 		var rankText:FlxText = new FlxText(0, 10);
@@ -73,7 +86,7 @@ class StoryMenuState extends MusicBeatState
 		rankText.screenCenter(X);
 
 		var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
-		var bgYellow:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 386, 0xFFCECECE);
+		var bgYellow:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 386, 0xFFFFFFFF);
 		bgSprite = new FlxSprite(0, 56);
 		bgSprite.antialiasing = ClientPrefs.globalAntialiasing;
 
@@ -182,6 +195,13 @@ class StoryMenuState extends MusicBeatState
 		add(scoreText);
 		add(txtWeekTitle);
 
+		if(ClientPrefs.shaders)
+		{
+			chrom = new ChromaticAberrationEffect();
+
+		    addShader(chrom);
+		}
+
 		var daStat1:FlxSprite = new FlxSprite(0,0);
 		daStat1.frames = Paths.getSparrowAtlas('daSTAT');
 		daStat1.animation.addByPrefix('static','staticFLASH',24,true);
@@ -278,6 +298,22 @@ class StoryMenuState extends MusicBeatState
 		daStat12.alpha = 0.075;
 		add(daStat12);
 
+		if(!ClientPrefs.globalAntialiasing)
+		{
+			daStat1.visible = false;
+			daStat2.visible = false;
+			daStat3.visible = false;
+			daStat4.visible = false;
+			daStat5.visible = false;
+			daStat6.visible = false;
+			daStat7.visible = false;
+			daStat8.visible = false;
+			daStat9.visible = false;
+			daStat10.visible = false;
+			daStat11.visible = false;
+			daStat12.visible = false;
+		}
+
 		var grain:FlxSprite = new FlxSprite(-318, -177);
 		grain.frames = Paths.getSparrowAtlas('grain');
 		grain.animation.addByPrefix('grain', 'pantalla', 24, true);
@@ -288,6 +324,8 @@ class StoryMenuState extends MusicBeatState
 
 		if (ClientPrefs.shaking)
 			FlxG.camera.shake(0.001, 99999999999);
+
+		doChrome(null, false);
 
 		changeWeek();
 		changeDifficulty();
@@ -318,13 +356,13 @@ class StoryMenuState extends MusicBeatState
 			if (upP)
 			{
 				changeWeek(-1);
-				FlxG.sound.play(Paths.sound('scrollMenu'));
+				//FlxG.sound.play(Paths.sound('scrollMenu'));
 			}
 
 			if (downP)
 			{
 				changeWeek(1);
-				FlxG.sound.play(Paths.sound('scrollMenu'));
+				//FlxG.sound.play(Paths.sound('scrollMenu'));
 			}
 
 			if(FlxG.mouse.wheel != 0)
@@ -386,6 +424,43 @@ class StoryMenuState extends MusicBeatState
 		{
 			lock.y = grpWeekText.members[lock.ID].y;
 			lock.visible = (lock.y > FlxG.height / 2);
+		});
+	}
+
+	function addShader(effect:ShaderEffect)
+	{
+		if (!ClientPrefs.shaders)
+			return;
+
+		shaders.push(effect);
+
+		var newCamEffects:Array<BitmapFilter> = [];
+
+		for (i in shaders)
+		{
+			newCamEffects.push(new ShaderFilter(i.shader));
+		}
+
+		FlxG.camera.setFilters(newCamEffects);
+	}
+
+	function doChrome(T:FlxTimer, ?setChrom:Bool = true)
+	{
+		if (!ClientPrefs.shaders)
+			return;
+
+		if (T != null)
+			T.cancel();
+
+		if (chrom != null && setChrom)
+			chrom.setChrome(FlxG.random.float(0.0, 0.002));
+
+		new FlxTimer().start(FlxG.random.float(0.08, 0.12), function(tmr:FlxTimer)
+		{
+			new FlxTimer().start(FlxG.random.float(0.7, 1.6), function(tmr:FlxTimer)
+			{
+				doChrome(tmr, true);
+			});
 		});
 	}
 

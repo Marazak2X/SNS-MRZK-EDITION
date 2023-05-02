@@ -52,8 +52,8 @@ class VisualsUISubState extends BaseOptionsMenu
 			"What should the Time Bar display?",
 			'timeBarType',
 			'string',
-			'Time Left',
-			['Time Left', 'Song Name', 'Disabled']);
+			'Time Elapsed',
+			['Time Elapsed', 'Song Name', 'Disabled']);
 		addOption(option);
 
 		var option:Option = new Option('Flashing Lights',
@@ -89,6 +89,18 @@ class VisualsUISubState extends BaseOptionsMenu
 			'scoreZoom',
 			'bool',
 			true);
+		addOption(option);
+
+		var option:Option = new Option('Lane Transparency',
+		    'Toggle a lane underway.',
+			'laneAlpha',
+			'percent',
+			0.0);
+		option.scrollSpeed = 1.5;
+		option.minValue = 0.0;
+		option.maxValue = 1;
+		option.changeValue = 0.1;
+		option.decimals = 1;
 		addOption(option);
 
 		var option:Option = new Option('Health Bar Transparency',

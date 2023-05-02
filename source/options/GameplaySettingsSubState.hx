@@ -41,12 +41,26 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			false);
 		addOption(option);
 
+		var option:Option = new Option('Anti-Spam',
+		    'If unchecked, you must spamming a notes.',
+			'antiSpam',
+			'bool',
+			true);
+		addOption(option);
+
 		//I'd suggest using "Downscroll" as an example for making your own option since it is the simplest here
 		var option:Option = new Option('Downscroll', //Name
 			'If checked, notes go Down instead of Up, simple enough.', //Description
 			'downScroll', //Save data variable name
 			'bool', //Variable type
 			false); //Default value
+		addOption(option);
+
+		var option:Option = new Option('Mechanics',
+		    "Uncheck this if you don't have a mechanics (noob version).",
+			'mechanics',
+			'bool',
+			true);
 		addOption(option);
 
 		var option:Option = new Option('Middlescroll',
@@ -108,8 +122,8 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			45);
 		option.displayFormat = '%vms';
 		option.scrollSpeed = 15;
-		option.minValue = 15;
-		option.maxValue = 45;
+		option.minValue = -1000;
+		option.maxValue = 1000;
 		addOption(option);
 
 		var option:Option = new Option('Good Hit Window',
@@ -119,8 +133,8 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			90);
 		option.displayFormat = '%vms';
 		option.scrollSpeed = 30;
-		option.minValue = 15;
-		option.maxValue = 90;
+		option.minValue = -1000;
+		option.maxValue = 1000;
 		addOption(option);
 
 		var option:Option = new Option('Bad Hit Window',
@@ -130,8 +144,19 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			135);
 		option.displayFormat = '%vms';
 		option.scrollSpeed = 60;
-		option.minValue = 15;
-		option.maxValue = 135;
+		option.minValue = -1000;
+		option.maxValue = 1000;
+		addOption(option);
+
+		var option:Option = new Option('Shit Hit Window',
+		    'Changes the amount of time you have\nfor hitting a "Shit" in milliseconds.',
+			'shitWindow',
+			'int',
+			160);
+		option.displayFormat = '%vms';
+		option.scrollSpeed = 45;
+		option.minValue = -1000;
+		option.maxValue = 1000;
 		addOption(option);
 
 		var option:Option = new Option('Safe Frames',

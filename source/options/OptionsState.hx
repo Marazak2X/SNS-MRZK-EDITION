@@ -24,6 +24,7 @@ import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
 import Controls;
+import WindowsData;
 
 using StringTools;
 
@@ -33,6 +34,8 @@ class OptionsState extends MusicBeatState
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
+
+	public static var isPause:Bool = false;
 
 	function openSelectedSubstate(label:String) {
 		switch(label) {
@@ -58,6 +61,11 @@ class OptionsState extends MusicBeatState
 		#if desktop
 		DiscordClient.changePresence("Options Menu", null);
 		#end
+
+		openfl.Lib.application.window.title = Main.appTitle + ' - ' + 'Options';
+
+		if(isPause)
+			FlxG.sound.playMusic(Paths.music('freakyMenu'));
 
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.color = 0xffcfcfcf;
@@ -179,7 +187,23 @@ class OptionsState extends MusicBeatState
 		daStat12.alpha = 0.075;
 		add(daStat12);
 
-		var grain:FlxSprite = new FlxSprite(-318, -177);
+		if(!ClientPrefs.globalAntialiasing)
+		{
+			daStat1.visible = false;
+			daStat2.visible = false;
+			daStat3.visible = false;
+			daStat4.visible = false;
+			daStat5.visible = false;
+			daStat6.visible = false;
+			daStat7.visible = false;
+			daStat8.visible = false;
+			daStat9.visible = false;
+			daStat10.visible = false;
+			daStat11.visible = false;
+			daStat12.visible = false;
+		}
+
+		var grain:FlxSprite = new FlxSprite(-318, -178);
 		grain.frames = Paths.getSparrowAtlas('grain');
 		grain.animation.addByPrefix('grain', 'pantalla', 24, true);
 		grain.scale.set(0.67, 0.67);
@@ -211,7 +235,13 @@ class OptionsState extends MusicBeatState
 
 		if (controls.BACK) {
 			FlxG.sound.play(Paths.sound('cancelMenu'));
-			MusicBeatState.switchState(new MainMenuState());
+			if(isPause) {
+				FlxG.sound.music.volume = 0;
+				isPause = false;
+				LoadingState.loadAndSwitchState(new PlayState());
+			} else {
+				MusicBeatState.switchState(new MainMenuState());
+			}
 		}
 
 		if (controls.ACCEPT) {

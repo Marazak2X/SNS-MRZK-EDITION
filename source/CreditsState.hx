@@ -18,6 +18,7 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 import lime.utils.Assets;
+import WindowsData;
 
 using StringTools;
 
@@ -43,6 +44,8 @@ class CreditsState extends MusicBeatState
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
+
+		openfl.Lib.application.window.title = Main.appTitle + ' - ' + 'Credits';
 
 		persistentUpdate = true;
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));

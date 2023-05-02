@@ -14,6 +14,9 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.FlxCamera;
 import flixel.util.FlxStringUtil;
+import openfl.Lib;
+import options.OptionsState;
+import WindowsData;
 
 class PauseSubState extends MusicBeatSubstate
 {
@@ -24,7 +27,8 @@ class PauseSubState extends MusicBeatSubstate
 	var menuItemsOG:Array<String> = [
 		'Resume', 
 		'Restart Song', 
-		'Change Difficulty', 
+		'Change Difficulty',
+		'Options',
 		'Exit to menu'
 	];
 	var difficultyChoices = [];
@@ -47,6 +51,8 @@ class PauseSubState extends MusicBeatSubstate
 	{
 		super();
 		if(CoolUtil.difficulties.length < 2) menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
+
+		Lib.application.window.title = Main.appTitle + ' - ' + PlayState.SONG.song + ' - ' + 'Pause';
 
 		if(PlayState.chartingMode)
 		{
@@ -223,6 +229,7 @@ class PauseSubState extends MusicBeatSubstate
 			switch (daSelected)
 			{
 				case "Resume":
+				    Lib.application.window.title = Main.appTitle + ' - ' + PlayState.SONG.song;
 					close();
 				case 'Change Difficulty':
 					menuItems = difficultyChoices;
@@ -233,9 +240,11 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.changedDifficulty = true;
 					practiceText.visible = PlayState.instance.practiceMode;
 				case "Restart Song":
+				    Lib.application.window.title = Main.appTitle;
 					restartSong();
 				case "Leave Charting Mode":
 					restartSong();
+					Lib.application.window.title = Main.appTitle;
 					PlayState.chartingMode = false;
 				case 'Skip Time':
 					if(curTime < Conductor.songPosition)
@@ -254,6 +263,7 @@ class PauseSubState extends MusicBeatSubstate
 					}
 				case "End Song":
 					close();
+					Lib.application.window.title = Main.appTitle;
 					PlayState.instance.finishSong(true);
 				case 'Toggle Botplay':
 					PlayState.instance.cpuControlled = !PlayState.instance.cpuControlled;
@@ -261,18 +271,27 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.instance.botplayTxt.visible = PlayState.instance.cpuControlled;
 					PlayState.instance.botplayTxt.alpha = 1;
 					PlayState.instance.botplaySine = 0;
+				case 'Options':
+					PlayState.seenCutscene = false;
+					OptionsState.isPause = true;
+					Lib.application.window.title = Main.appTitle;
+					LoadingState.loadAndSwitchState(new OptionsState());
+					FlxG.sound.music.stop();
 				case "Exit to menu":
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;
 
+					Lib.application.window.title = Main.appTitle;
+
 					WeekData.loadTheFirstEnabledMod();
 					if(PlayState.isStoryMode) {
 						MusicBeatState.switchState(new StoryMenuState());
+						FlxG.sound.playMusic(Paths.music('freakyMenu'));
 					} else {
+						FlxG.sound.music.stop();
 						MusicBeatState.switchState(new FreeplayState());
 					}
 					PlayState.cancelMusicFadeTween();
-					FlxG.sound.playMusic(Paths.music('freakyMenu'));
 					PlayState.changedDifficulty = false;
 					PlayState.chartingMode = false;
 			}

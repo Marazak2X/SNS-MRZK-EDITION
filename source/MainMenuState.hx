@@ -10,16 +10,25 @@ import flixel.FlxCamera;
 import flixel.addons.display.FlxBackdrop;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.effects.FlxFlicker;
+import openfl.display.BlendMode;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.math.FlxMath;
+import openfl.filters.BitmapFilter;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import flixel.util.FlxTimer;
 import flixel.util.FlxColor;
 import lime.app.Application;
 import editors.MasterEditorMenu;
 import flixel.input.keyboard.FlxKey;
+import flixel.addons.display.FlxRuntimeShader;
+import openfl.Lib;
+import openfl.filters.ShaderFilter;
+import options.OptionsState;
+import Shaders;
+import WindowsData;
 
 using StringTools;
 
@@ -45,12 +54,21 @@ class MainMenuState extends MusicBeatState
 	var camFollowPos:FlxObject;
 	var debugKeys:Array<FlxKey>;
 
+	var chromStuffTween:FlxTween;
+	var chromTween:FlxTween;
+
+    var chromeValue:Float = 0;
+	var shaders:Array<ShaderEffect> = [];
+	var chrom:ChromaticAberrationEffect;
+
 	override function create()
 	{
 		#if MODS_ALLOWED
 		Paths.pushGlobalMods();
 		#end
 		WeekData.loadTheFirstEnabledMod();
+
+		Lib.application.window.title = Main.appTitle + ' - ' + "Main Menu";
 
 		#if desktop
 		// Updating Discord Rich Presence
@@ -88,6 +106,7 @@ class MainMenuState extends MusicBeatState
 		mockybg.scrollFactor.set(0, 0);
 		mockybg.updateHitbox();
 		mockybg.screenCenter();
+        mockybg.blend = BlendMode.OVERLAY;
 		mockybg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(mockybg);
 
@@ -139,7 +158,7 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollowPos, null, 1);
 
-		var versionShit:FlxText = new FlxText(12, FlxG.height - 64, 0, "Suicide v1.0", 12);
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 64, 0, "Suicide v1.2.5", 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
@@ -152,10 +171,18 @@ class MainMenuState extends MusicBeatState
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
 
+		if(ClientPrefs.shaders)
+		{
+			chrom = new ChromaticAberrationEffect();
+
+		    addShader(chrom);
+		}
+
 		var daStat1:FlxSprite = new FlxSprite(0,0);
 		daStat1.frames = Paths.getSparrowAtlas('daSTAT');
 		daStat1.animation.addByPrefix('static','staticFLASH',24,true);
 		daStat1.animation.play('static');
+        daStat1.blend = BlendMode.SHADER;
 		daStat1.scrollFactor.set(0, 0);
 		daStat1.alpha = 0.075;
 		add(daStat1);
@@ -165,6 +192,7 @@ class MainMenuState extends MusicBeatState
 		daStat2.animation.addByPrefix('static','staticFLASH',24,true);
 		daStat2.animation.play('static');
 		daStat2.scrollFactor.set(0, 0);
+        daStat2.blend = BlendMode.SHADER;
 		daStat2.alpha = 0.075;
 		add(daStat2);
 
@@ -174,12 +202,14 @@ class MainMenuState extends MusicBeatState
 		daStat3.animation.play('static');
 		daStat3.scrollFactor.set(0, 0);
 		daStat3.alpha = 0.075;
+        daStat3.blend = BlendMode.SHADER;
 		add(daStat3);
 
 		var daStat4:FlxSprite = new FlxSprite(1203,0);
 		daStat4.frames = Paths.getSparrowAtlas('daSTAT');
 		daStat4.animation.addByPrefix('static','staticFLASH',24,true);
 		daStat4.animation.play('static');
+        daStat4.blend = BlendMode.SHADER;
 		daStat4.scrollFactor.set(0, 0);
 		daStat4.alpha = 0.075;
 		add(daStat4);
@@ -189,6 +219,7 @@ class MainMenuState extends MusicBeatState
 		daStat5.animation.addByPrefix('static','staticFLASH',24,true);
 		daStat5.animation.play('static');
 		daStat5.scrollFactor.set(0, 0);
+        daStat5.blend = BlendMode.SHADER;
 		daStat5.alpha = 0.075;
 		add(daStat5);
 
@@ -197,6 +228,7 @@ class MainMenuState extends MusicBeatState
 		daStat6.animation.addByPrefix('static','staticFLASH',24,true);
 		daStat6.animation.play('static');
 		daStat6.scrollFactor.set(0, 0);
+        daStat6.blend = BlendMode.SHADER;
 		daStat6.alpha = 0.075;
 		add(daStat6);
 
@@ -205,6 +237,7 @@ class MainMenuState extends MusicBeatState
 		daStat7.animation.addByPrefix('static','staticFLASH',24,true);
 		daStat7.animation.play('static');
 		daStat7.scrollFactor.set(0, 0);
+        daStat7.blend = BlendMode.SHADER;
 		daStat7.alpha = 0.075;
 		add(daStat7);
 
@@ -213,6 +246,7 @@ class MainMenuState extends MusicBeatState
 		daStat8.animation.addByPrefix('static','staticFLASH',24,true);
 		daStat8.animation.play('static');
 		daStat8.scrollFactor.set(0, 0);
+        daStat8.blend = BlendMode.SHADER;
 		daStat8.alpha = 0.075;
 		add(daStat8);
 
@@ -220,6 +254,7 @@ class MainMenuState extends MusicBeatState
 		daStat9.frames = Paths.getSparrowAtlas('daSTAT');
 		daStat9.animation.addByPrefix('static','staticFLASH',24,true);
 		daStat9.animation.play('static');
+        daStat9.blend = BlendMode.SHADER;
 		daStat9.scrollFactor.set(0, 0);
 		daStat9.alpha = 0.075;
 		add(daStat9);
@@ -228,6 +263,7 @@ class MainMenuState extends MusicBeatState
 		daStat10.frames = Paths.getSparrowAtlas('daSTAT');
 		daStat10.animation.addByPrefix('static','staticFLASH',24,true);
 		daStat10.animation.play('static');
+        daStat10.blend = BlendMode.SHADER;
 		daStat10.scrollFactor.set(0, 0);
 		daStat10.alpha = 0.075;
 		add(daStat10);
@@ -237,6 +273,7 @@ class MainMenuState extends MusicBeatState
 		daStat11.animation.addByPrefix('static','staticFLASH',24,true);
 		daStat11.animation.play('static');
 		daStat11.scrollFactor.set(0, 0);
+        daStat11.blend = BlendMode.SHADER;
 		daStat11.alpha = 0.075;
 		add(daStat11);
 
@@ -245,10 +282,27 @@ class MainMenuState extends MusicBeatState
 		daStat12.animation.addByPrefix('static','staticFLASH',24,true);
 		daStat12.animation.play('static');
 		daStat12.scrollFactor.set(0, 0);
+        daStat12.blend = BlendMode.SHADER;
 		daStat12.alpha = 0.075;
 		add(daStat12);
 
-		var grain:FlxSprite = new FlxSprite(-318, -177);
+		if(!ClientPrefs.globalAntialiasing)
+		{
+			daStat1.visible = false;
+			daStat2.visible = false;
+			daStat3.visible = false;
+			daStat4.visible = false;
+			daStat5.visible = false;
+			daStat6.visible = false;
+			daStat7.visible = false;
+			daStat8.visible = false;
+			daStat9.visible = false;
+			daStat10.visible = false;
+			daStat11.visible = false;
+			daStat12.visible = false;
+		}
+
+		var grain:FlxSprite = new FlxSprite(-318, -178);
 		grain.frames = Paths.getSparrowAtlas('grain');
 		grain.animation.addByPrefix('grain', 'pantalla', 24, true);
 		grain.scale.set(0.67, 0.67);
@@ -259,6 +313,8 @@ class MainMenuState extends MusicBeatState
 
 		if (ClientPrefs.shaking)
 			FlxG.camera.shake(0.001, 99999999999);
+
+		doChrome(null, false);
 
 		// NG.core.calls.event.logEvent('swag').send();
 
@@ -318,7 +374,8 @@ class MainMenuState extends MusicBeatState
 					selectedSomethin = true;
 					FlxG.sound.play(Paths.sound('confirmMenu'));
 
-					if(ClientPrefs.flashing) FlxFlicker.flicker(magenta, 1.1, 0.15, false);
+					if(curSelected == 1)
+						FlxG.sound.music.fadeOut(0.85, 0);
 
 					menuItems.forEach(function(spr:FlxSprite)
 					{
@@ -343,11 +400,13 @@ class MainMenuState extends MusicBeatState
 									case 'story_mode':
 										MusicBeatState.switchState(new StoryMenuState());
 									case 'freeplay':
+										FlxG.sound.music.stop();
 										MusicBeatState.switchState(new FreeplayState());
 									case 'credits':
 										MusicBeatState.switchState(new CreditsState());
 									case 'options':
-										LoadingState.loadAndSwitchState(new options.OptionsState());
+										OptionsState.isPause = false;
+										LoadingState.loadAndSwitchState(new OptionsState());
 								}
 							});
 						}
@@ -368,6 +427,43 @@ class MainMenuState extends MusicBeatState
 		menuItems.forEach(function(spr:FlxSprite)
 		{
 			spr.screenCenter(X);
+		});
+	}
+
+	function addShader(effect:ShaderEffect)
+	{
+		if (!ClientPrefs.shaders)
+			return;
+
+		shaders.push(effect);
+
+		var newCamEffects:Array<BitmapFilter> = [];
+
+		for (i in shaders)
+		{
+			newCamEffects.push(new ShaderFilter(i.shader));
+		}
+
+		FlxG.camera.setFilters(newCamEffects);
+	}
+
+	function doChrome(T:FlxTimer, ?setChrom:Bool = true)
+	{
+		if (!ClientPrefs.shaders)
+			return;
+
+		if (T != null)
+			T.cancel();
+
+		if (chrom != null && setChrom)
+			chrom.setChrome(FlxG.random.float(0.0, 0.002));
+
+		new FlxTimer().start(FlxG.random.float(0.08, 0.12), function(tmr:FlxTimer)
+		{
+			new FlxTimer().start(FlxG.random.float(0.7, 1.6), function(tmr:FlxTimer)
+			{
+				doChrome(tmr, true);
+			});
 		});
 	}
 

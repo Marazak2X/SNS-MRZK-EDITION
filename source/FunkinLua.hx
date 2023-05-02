@@ -1565,6 +1565,7 @@ class FunkinLua {
 
 			PlayState.cancelMusicFadeTween();
 			CustomFadeTransition.nextCamera = PlayState.instance.camHUDOther;
+			CustomFadeTransition.nextCamera = PlayState.instance.camSubtitles;
 			CustomFadeTransition.nextCamera = PlayState.instance.camOther;
 			if(FlxTransitionableState.skipNextTransIn)
 				CustomFadeTransition.nextCamera = null;
@@ -3116,6 +3117,7 @@ class FunkinLua {
 	function cameraFromString(cam:String):FlxCamera {
 		switch(cam.toLowerCase()) {
 			case 'camhudother' | 'hudother': return PlayState.instance.camHUDOther;
+			case 'camsubtitles' | 'subtitles': return PlayState.instance.camSubtitles;
 			case 'camhud' | 'hud': return PlayState.instance.camHUD;
 			case 'camother' | 'other': return PlayState.instance.camOther;
 		}

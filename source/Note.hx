@@ -149,7 +149,7 @@ class Note extends FlxSprite
 				case 'Suicide Note':
 					ignoreNote = mustPress;
 					reloadNote('SUICIDE');
-					noteSplashTexture = 'HURTnoteSplashes';
+					noteSplashTexture = 'SUICIDEsplash';
 					hitCausesMiss = true;
 
 				case 'Alt Animation':

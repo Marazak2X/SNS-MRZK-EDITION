@@ -18,6 +18,8 @@ class GameOverSubstate extends MusicBeatSubstate
 	var updateCamera:Bool = false;
 	var playingDeathSound:Bool = false;
 
+	var mustEsc:Bool = true;
+
 	var stageSuffix:String = "";
 
 	public static var characterName:String = 'bf-dead';
@@ -85,9 +87,10 @@ class GameOverSubstate extends MusicBeatSubstate
 		if (controls.ACCEPT)
 		{
 			endBullshit();
+			mustEsc = false;
 		}
 
-		if (controls.BACK)
+		if (controls.BACK && mustEsc)
 		{
 			FlxG.sound.music.stop();
 			PlayState.deathCounter = 0;

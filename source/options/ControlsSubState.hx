@@ -24,6 +24,7 @@ import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
 import Controls;
+import WindowsData;
 
 using StringTools;
 
@@ -205,7 +206,23 @@ class ControlsSubState extends MusicBeatSubstate {
 		daStat12.alpha = 0.075;
 		add(daStat12);
 
-		var grain:FlxSprite = new FlxSprite(-318, -177);
+		if(!ClientPrefs.globalAntialiasing)
+		{
+			daStat1.visible = false;
+			daStat2.visible = false;
+			daStat3.visible = false;
+			daStat4.visible = false;
+			daStat5.visible = false;
+			daStat6.visible = false;
+			daStat7.visible = false;
+			daStat8.visible = false;
+			daStat9.visible = false;
+			daStat10.visible = false;
+			daStat11.visible = false;
+			daStat12.visible = false;
+		}
+
+		var grain:FlxSprite = new FlxSprite(-318, -178);
 		grain.frames = Paths.getSparrowAtlas('grain');
 		grain.animation.addByPrefix('grain', 'pantalla', 24, true);
 		grain.scale.set(0.67, 0.67);

@@ -16,6 +16,8 @@ import lime.utils.AssetManifest;
 
 import haxe.io.Path;
 
+import WindowsData;
+
 class LoadingState extends MusicBeatState
 {
 	inline static var MIN_TIME = 1.0;

@@ -4,6 +4,9 @@ import flixel.graphics.FlxGraphic;
 import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxState;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+import flixel.util.FlxTimer;
 import openfl.Assets;
 import openfl.Lib;
 import openfl.display.FPS;
@@ -23,6 +26,8 @@ import sys.io.File;
 import sys.io.Process;
 #end
 
+import CppAPI;
+
 using StringTools;
 
 class Main extends Sprite
@@ -30,6 +35,7 @@ class Main extends Sprite
 	var game = {width: 1280, height: 720, initialState: TitleState, zoom: -1.0, framerate: 60, skipSplash: true, startFullscreen: false };
 	public static var fpsVar:FPS;
 	public static var appTitle:String = "Sunday Night Suicide': Mrzk Version";
+	public static var focusMusicTween:FlxTween;
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
@@ -75,7 +81,10 @@ class Main extends Sprite
 			game.width = Math.ceil(stageWidth / game.zoom);
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
-	
+
+		#if cpp
+		CppAPI.darkMode();
+		#end
 		ClientPrefs.loadDefaultKeys();
 		addChild(new FlxGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
 
@@ -94,6 +103,73 @@ class Main extends Sprite
 		#if CRASH_HANDLER
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 		#end
+
+		Application.current.window.onFocusOut.add(onWindowFocusOut);
+		Application.current.window.onFocusIn.add(onWindowFocusIn);
+	}
+
+	var oldVol:Float = 1.0;
+	var newVol:Float = 0.3;
+
+	public static var focused:Bool = true;
+
+	// thx for ur code ari
+	function onWindowFocusOut()
+	{
+		focused = false;
+
+		// Lower global volume when unfocused
+		if (Type.getClass(FlxG.state) != PlayState) // imagine stealing my code smh
+		{
+			oldVol = FlxG.sound.volume;
+			if (oldVol > 0.3)
+			{
+				newVol = 0.3;
+			}
+			else
+			{
+				if (oldVol > 0.1)
+				{
+					newVol = 0.1;
+				}
+				else
+				{
+					newVol = 0;
+				}
+			}
+
+			trace("Game unfocused");
+
+			if (focusMusicTween != null)
+				focusMusicTween.cancel();
+			focusMusicTween = FlxTween.tween(FlxG.sound, {volume: newVol}, 0.5);
+
+			// Conserve power by lowering draw framerate when unfocuced
+			FlxG.drawFramerate = 60;
+		}
+	}
+
+	function onWindowFocusIn()
+	{
+		new FlxTimer().start(0.2, function(tmr:FlxTimer)
+		{
+			focused = true;
+		});
+
+		// Lower global volume when unfocused
+		if (Type.getClass(FlxG.state) != PlayState)
+		{
+			trace("Game focused");
+
+			// Normal global volume when focused
+			if (focusMusicTween != null)
+				focusMusicTween.cancel();
+
+			focusMusicTween = FlxTween.tween(FlxG.sound, {volume: oldVol}, 0.5);
+
+			// Bring framerate back when focused
+			FlxG.drawFramerate = 120;
+		}
 	}
 
 	// Code was entirely made by sqirra-rng for their fnf engine named "Izzy Engine", big props to them!!!
@@ -109,7 +185,7 @@ class Main extends Sprite
 		dateNow = dateNow.replace(" ", "_");
 		dateNow = dateNow.replace(":", "'");
 
-		path = "./crash/" + "PsychEngine_" + dateNow + ".txt";
+		path = "./crash/" + "SNSMrzkVersion_" + dateNow + ".txt";
 
 		for (stackItem in callStack)
 		{
