@@ -2,8 +2,8 @@
 	"animations": [
 		{
 			"offsets": [
-				0,
-				0
+				67,
+				6
 			],
 			"loop": false,
 			"fps": 24,
@@ -13,8 +13,8 @@
 		},
 		{
 			"offsets": [
-				30,
-				20
+				-45,
+				-106
 			],
 			"loop": false,
 			"fps": 24,
@@ -24,8 +24,8 @@
 		},
 		{
 			"offsets": [
-				15,
-				0
+				125,
+				10
 			],
 			"loop": false,
 			"fps": 24,
@@ -35,8 +35,8 @@
 		},
 		{
 			"offsets": [
-				0,
-				0
+				-47,
+				-52
 			],
 			"loop": false,
 			"fps": 24,
@@ -46,55 +46,33 @@
 		},
 		{
 			"offsets": [
-				35,
-				160
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "singUP-alt",
-			"indices": [],
-			"name": "Sadmouse Jumpscare"
-		},
-		{
-			"offsets": [
-				35,
-				160
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "singRIGHT-alt",
-			"indices": [],
-			"name": "Sadmouse Jumpscare"
-		},
-		{
-			"loop": true,
-			"offsets": [
 				0,
 				0
 			],
-			"anim": "idle",
+			"loop": false,
 			"fps": 24,
-			"name": "Sadmouse Idle",
-			"indices": []
+			"anim": "idle",
+			"indices": [],
+			"name": "Sadmouse Idle"
 		}
 	],
 	"no_antialiasing": false,
-	"image": "characters/bipolarmouse_assets",
+	"image": "characters/Suicide_Mouse_COLLAB",
 	"position": [
-		20,
-		0
+		-50,
+		-190
 	],
-	"healthicon": "really",
+	"healthicon": "collabmouse",
 	"flip_x": false,
 	"healthbar_colors": [
-		13,
-		13,
-		13
+		153,
+		153,
+		153
 	],
 	"camera_position": [
 		0,
 		0
 	],
 	"sing_duration": 6.1,
-	"scale": 1
+	"scale": 0.7
 }

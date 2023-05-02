@@ -3,30 +3,57 @@
 	"difficulties": "",
 	"hideFreeplay": false,
 	"weekBackground": "",
-	"weekBefore": "tutorial",
 	"freeplayColor": [
 		146,
 		113,
 		253
 	],
+	"weekBefore": "tutorial",
 	"startUnlocked": true,
-	"hideStoryMode": true,
-	"songs": [
-		[
-			"Really Happy New",
-			"bipolarmouse",
-			[
-				15,
-				15,
-				15
-			]
-		]
-	],
 	"weekCharacters": [
 		"",
 		"",
 		""
 	],
-	"hiddenUntilUnlocked": false,
-	"weekName": "LOL Wek"
+	"songs": [
+		[
+			"Smile",
+			"altsadmouse",
+			[
+				155,
+				155,
+				155
+			]
+		],
+		[
+			"Really Happy New",
+			"really",
+			[
+				15,
+				15,
+				15
+			]
+		],
+		[
+			"A Fate Worse Than Death",
+			"happy",
+			[
+				75,
+				75,
+				75
+			]
+		],
+		[
+			"Happy-neo",
+			"neomouse",
+			[
+				126,
+				33,
+				175
+			]
+		]
+	],
+	"hideStoryMode": true,
+	"weekName": "LOL Wek",
+	"hiddenUntilUnlocked": false
 }

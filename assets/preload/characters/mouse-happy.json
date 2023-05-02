@@ -26,7 +26,7 @@
 			"loop": false,
 			"offsets": [
 				0,
-				0
+				40
 			],
 			"anim": "singUP",
 			"fps": 24,
@@ -49,25 +49,36 @@
 				0,
 				0
 			],
-			"indices": [],
+			"loop": false,
 			"fps": 24,
-			"anim": "idle",
+			"anim": "singDOWN-alt",
+			"indices": [],
+			"name": "Sadmouse Laugh"
+		},
+		{
 			"loop": true,
-			"name": "Sadmouse Idle"
+			"offsets": [
+				0,
+				0
+			],
+			"anim": "idle",
+			"fps": 24,
+			"name": "Sadmouse Idle",
+			"indices": []
 		}
 	],
 	"no_antialiasing": false,
-	"image": "characters/sadmouse_assets",
+	"image": "characters/happymouse2_assets",
 	"position": [
 		0,
 		0
 	],
-	"healthicon": "sadmouse",
+	"healthicon": "happy2",
 	"flip_x": false,
 	"healthbar_colors": [
-		153,
-		153,
-		153
+		51,
+		51,
+		51
 	],
 	"camera_position": [
 		0,

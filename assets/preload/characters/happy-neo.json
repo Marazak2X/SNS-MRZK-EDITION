@@ -1,0 +1,100 @@
+{
+	"animations": [
+		{
+			"loop": false,
+			"offsets": [
+				81,
+				-4
+			],
+			"anim": "singLEFT",
+			"fps": 24,
+			"name": "Happymouse Left",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				7,
+				-4
+			],
+			"anim": "singDOWN",
+			"fps": 24,
+			"name": "Happymouse Down",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				6,
+				160
+			],
+			"anim": "singUP",
+			"fps": 24,
+			"name": "Happymouse Up",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				110,
+				1
+			],
+			"anim": "singRIGHT",
+			"fps": 24,
+			"name": "Happymouse Right",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				0,
+				0
+			],
+			"anim": "idle",
+			"fps": 24,
+			"name": "Happymouse Idle",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				8,
+				1
+			],
+			"anim": "singDOWN-alt",
+			"fps": 24,
+			"name": "Happymouse Laugh0",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				36,
+				0
+			],
+			"anim": "singRIGHT-alt",
+			"fps": 24,
+			"name": "Happymouse LaughA",
+			"indices": []
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/happyneo_assets",
+	"position": [
+		-50,
+		0
+	],
+	"healthicon": "neohappy",
+	"flip_x": false,
+	"healthbar_colors": [
+		76,
+		35,
+		113
+	],
+	"camera_position": [
+		100,
+		0
+	],
+	"sing_duration": 6.1,
+	"scale": 1
+}
