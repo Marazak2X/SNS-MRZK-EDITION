@@ -1,32 +1,114 @@
+local allowCountdown = true;
+local isStart = false;
+
+function onStartCountdown()
+   if not allowCountdown then
+      doTweenAlpha('warnFade','warn',1,1);
+      doTweenAlpha('pressFadeIn','pressTxt',1,2);
+      return Function_Stop;
+   end
+   return Function_Continue;
+end
+
 function onCreate()
-   makeLuaSprite('blacking','',-200,-200)
-   makeGraphic('blacking',1920,1080,'000000')
+   makeLuaSprite('blacking','aBlackFuckBecauseAMakeGraphicdonotwork',0,0)
    setObjectCamera('blacking','camOther')
    addLuaSprite('blacking',true)
+
+   makeLuaSprite('warn','suicideUI/warning',0,0)
+   screenCenter('warn')
+   setProperty('warn.alpha',0);
+   setObjectCamera('warn','camOther')
+   addLuaSprite('warn',true)
+
+   makeLuaText('pressTxt','Press Enter to Begin',1000,485,655)
+   setTextFont('pressTxt','vcr.ttf')
+   setTextSize('pressTxt',27.5)
+   setProperty('pressTxt.alpha',0)
+   setObjectCamera('pressTxt','camOther')
+   addLuaText('pressTxt',false)
+end
+
+function onCreatePost()
+   setProperty('introSoundsSuffix','');
+   setProperty('isMouseStage',false);
+
+   if not isStoryMode then
+      isStart = false;
+      allowCountdown = true;
+   else
+      isStart = true;
+      allowCountdown = false;
+   end
+end
+
+function onSongStart()
+   doTweenAlpha('blackingFade','blacking',0,1);
 end
 
 function onTimerCompleted(t)
    if t == 'camAngle' then
       runTimer('camlol',1.3)
-      doTweenAngle('cam1Angle','camHUD',5,2,'backinout')
+      doTweenAngle('cam1Angle','camHUD',3,2,'cubeout')
    elseif t == 'camlol' then
       runTimer('camAngle',1.3)
-      doTweenAngle('cam2Angle','camHUD',-5,2,'backinout')
+      doTweenAngle('cam2Angle','camHUD',-3,2,'cubeout')
+   end
+   if t == 'songStart' then
+      startCountdown();
+      allowCountdown = true;
+   end
+   if t == 'pressed' then
+      setProperty('pressTxt.alpha',1);
+      runTimer('pressedW',0.1);
+   end
+   if t == 'pressedW' then
+      setProperty('pressTxt.alpha',0);
+      runTimer('pressed',0.1);
    end
 end
 
-function onSongStart()
-   doTweenAlpha('blackfuck','blacking',0,1)
+function onTweenCompleted(t)
+   if t == 'pressFadeIn' then
+      cancelTween('pressFadeIn');
+      doTweenAlpha('pressFadeOut','pressTxt',0,2);
+   end
+   if t == 'pressFadeOut' then
+      cancelTween('pressFadeOut');
+      doTweenAlpha('pressFadeIn','pressTxt',1,2);
+   end
+   if t == 'warnFadeOut' then
+      cancelTimer('pressed');
+      cancelTimer('pressedW');
+      setProperty('pressTxt.visible',false);
+   end
 end
 
 function onUpdate()
-   cameraShake('camGame', 0.001, 999999)
-   cameraShake('camHUD', 0.001, 999999)
+   local shakin = getPropertyFromClass('ClientPrefs','shaking')
+
+   if getPropertyFromClass('flixel.FlxG','keys.justPressed.ENTER') and isStart then
+      runTimer('songStart',0.02);
+      allowCountdown = true;
+      cancelTween('pressFadeIn');
+      cancelTween('pressFadeOut');
+      setProperty('pressTxt.alpha',0);
+      playSound('click',0.95);
+      runTimer('pressed',0.1);
+      doTweenAlpha('warnFadeOut','warn',0,1);
+      cancelTween('warnFade')
+      isStart = false;
+   end
+
+   if shakin then
+      cameraShake('camGame', 0.0008, 999999)
+      cameraShake('camHUD', 0.0008, 999999)
+   end
 end
 
 function happyMouse()
    runTimer('camAngle',1.3)
-   doTweenAngle('cam2Angle','camHUD',-5,2,'backinout')
+   doTweenAngle('cam2Angle','camHUD',-3,2,'cubeout')
 end
 
 local curSection = 0;
@@ -66,6 +148,7 @@ function onStepHit()
       itemFade(0, 1, 0.1)
       fadeBfStrum(1, 0.1)
       fadeDadStrum(1, 0.1)
+      setProperty('isMouseStage',true);
       happyMouse()
    end
    if curStep == 832 then
@@ -77,8 +160,12 @@ function onStepHit()
 end
 
 function opponentNoteHit()
+   local shakin = getPropertyFromClass('ClientPrefs','shaking')
+
    if getProperty('dad.curCharacter') == 'mouse-happy' then
-      triggerEvent('Screen Shake', '0.2, 0.035', '0.2, 0.035')
+      if shakin then
+         triggerEvent('Screen Shake', '0.2, 0.035', '0.2, 0.035')
+      end
    end
 end
 
@@ -111,6 +198,7 @@ function itemFade(num, alph, duration)
       doTweenAlpha('itm3','timeTxt',alph,duration,'linear')
       doTweenAlpha('itm4','botplayTxt',alph,duration,'linear')
       doTweenAlpha('itm5','healthBarBG',alph,duration,'linear')
+      doTweenAlpha('itm55','healthBarBG2',alph,duration,'linear')
       doTweenAlpha('itm6','healthBar',alph,duration,'linear')
       doTweenAlpha('itm7','iconP1',alph,duration,'linear')
       doTweenAlpha('itm8','iconP2',alph,duration,'linear')

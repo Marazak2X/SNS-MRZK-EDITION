@@ -1,6 +1,22 @@
+function onStartCountdown()
+   makeLuaSprite('blacking','aBlackFuckBecauseAMakeGraphicdonotwork',0,0)
+   setObjectCamera('blacking','camOther')
+   addLuaSprite('blacking',true)
+
+   doTweenAlpha('blackfuck','blacking',0,1)
+end
+function onCreatePost()
+   setProperty('introSoundsSuffix','');
+   setProperty('isMouseStage',false);
+end
+
 function onUpdate()
-   cameraShake('camGame', 0.001, 999999)
-   cameraShake('camHUD', 0.001, 999999)
+   shakin = getPropertyFromClass('ClientPrefs','shaking')
+
+   if shakin then
+      cameraShake('camGame', 0.0008, 999999)
+      cameraShake('camHUD', 0.0008, 999999)
+   end
 end
 
 local curSection = 0;
@@ -68,6 +84,7 @@ function itemFade(num, alph, duration)
       doTweenAlpha('itm3','timeTxt',alph,duration,'linear')
       doTweenAlpha('itm4','botplayTxt',alph,duration,'linear')
       doTweenAlpha('itm5','healthBarBG',alph,duration,'linear')
+      doTweenAlpha('itm55','healthBarBG2',alph,duration,'linear')
       doTweenAlpha('itm6','healthBar',alph,duration,'linear')
       doTweenAlpha('itm7','iconP1',alph,duration,'linear')
       doTweenAlpha('itm8','iconP2',alph,duration,'linear')

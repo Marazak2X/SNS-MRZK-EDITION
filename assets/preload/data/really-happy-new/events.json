@@ -177,6 +177,16 @@
 				]
 			],
 			[
+				54861.6071428572,
+				[
+					[
+						"Change Character",
+						"dad",
+						"mouse-reanimated"
+					]
+				]
+			],
+			[
 				67714.2857142858,
 				[
 					[
@@ -247,6 +257,16 @@
 				]
 			],
 			[
+				82281.25,
+				[
+					[
+						"Change Character",
+						"dad",
+						"mouse-reanimated"
+					]
+				]
+			],
+			[
 				82285.7142857143,
 				[
 					[
@@ -298,6 +318,16 @@
 						"Change Scroll Speed",
 						"1.05",
 						"1"
+					]
+				]
+			],
+			[
+				97285.7142857143,
+				[
+					[
+						"Change Character",
+						"dad",
+						"suicide-mouse"
 					]
 				]
 			],
@@ -412,6 +442,16 @@
 				]
 			],
 			[
+				156214.285714286,
+				[
+					[
+						"Change Character",
+						"dad",
+						"suicide-mouse"
+					]
+				]
+			],
+			[
 				164571.428571428,
 				[
 					[
@@ -427,7 +467,7 @@
 					[
 						"Camera Follow Pos",
 						"365",
-						"250"
+						"220"
 					]
 				]
 			]
