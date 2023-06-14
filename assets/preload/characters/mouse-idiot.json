@@ -1,0 +1,34 @@
+{
+	"animations": [
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "Jump",
+			"indices": [],
+			"name": "Jump"
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/hes_just_press_enter",
+	"position": [
+		-60,
+		-10
+	],
+	"healthicon": "pibbified",
+	"flip_x": false,
+	"healthbar_colors": [
+		51,
+		51,
+		51
+	],
+	"camera_position": [
+		-220,
+		-60
+	],
+	"sing_duration": 6.1,
+	"scale": 1.2
+}

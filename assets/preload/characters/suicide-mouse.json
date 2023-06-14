@@ -1,81 +1,81 @@
 {
 	"animations": [
 		{
+			"loop": false,
 			"offsets": [
 				0,
 				0
 			],
-			"loop": false,
-			"fps": 24,
 			"anim": "singLEFT",
-			"indices": [],
-			"name": "Sadmouse Left"
+			"fps": 24,
+			"name": "Sadmouse Left",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				30,
 				20
 			],
-			"loop": false,
-			"fps": 24,
 			"anim": "singDOWN",
-			"indices": [],
-			"name": "Sadmouse Down"
+			"fps": 24,
+			"name": "Sadmouse Down",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				15,
 				0
 			],
-			"loop": false,
-			"fps": 24,
 			"anim": "singUP",
-			"indices": [],
-			"name": "Sadmouse Up"
-		},
-		{
-			"offsets": [
-				0,
-				0
-			],
-			"loop": false,
 			"fps": 24,
-			"anim": "singRIGHT",
-			"indices": [],
-			"name": "Sadmouse Right"
-		},
-		{
-			"offsets": [
-				35,
-				160
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "singUP-alt",
-			"indices": [],
-			"name": "Sadmouse Jumpscare"
-		},
-		{
-			"offsets": [
-				35,
-				160
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "singRIGHT-alt",
-			"indices": [],
-			"name": "Sadmouse Jumpscare"
-		},
-		{
-			"loop": true,
-			"offsets": [
-				0,
-				0
-			],
-			"anim": "idle",
-			"fps": 24,
-			"name": "Sadmouse Idle",
+			"name": "Sadmouse Up",
 			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				0,
+				0
+			],
+			"anim": "singRIGHT",
+			"fps": 24,
+			"name": "Sadmouse Right",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				35,
+				160
+			],
+			"anim": "singUP-alt",
+			"fps": 24,
+			"name": "Sadmouse Jumpscare",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				35,
+				160
+			],
+			"anim": "singRIGHT-alt",
+			"fps": 24,
+			"name": "Sadmouse Jumpscare",
+			"indices": []
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": true,
+			"fps": 24,
+			"anim": "idle",
+			"indices": [],
+			"name": "Sadmouse Idle"
 		}
 	],
 	"no_antialiasing": false,
@@ -84,7 +84,7 @@
 		20,
 		0
 	],
-	"healthicon": "really",
+	"healthicon": "oldreally",
 	"flip_x": false,
 	"healthbar_colors": [
 		13,

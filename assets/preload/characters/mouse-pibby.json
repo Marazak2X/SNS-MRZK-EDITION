@@ -2,19 +2,8 @@
 	"animations": [
 		{
 			"offsets": [
-				0,
-				0
-			],
-			"loop": true,
-			"fps": 20,
-			"anim": "idle",
-			"indices": [],
-			"name": "Idle"
-		},
-		{
-			"offsets": [
-				82,
-				5
+				2,
+				-95
 			],
 			"loop": false,
 			"fps": 24,
@@ -24,8 +13,8 @@
 		},
 		{
 			"offsets": [
-				20,
-				10
+				-30,
+				-340
 			],
 			"loop": false,
 			"fps": 24,
@@ -35,8 +24,8 @@
 		},
 		{
 			"offsets": [
-				-30,
-				110
+				30,
+				-191
 			],
 			"loop": false,
 			"fps": 24,
@@ -46,8 +35,8 @@
 		},
 		{
 			"offsets": [
-				46,
-				-10
+				-49,
+				-240
 			],
 			"loop": false,
 			"fps": 24,
@@ -56,45 +45,34 @@
 			"name": "Right"
 		},
 		{
+			"loop": true,
 			"offsets": [
-				100,
-				110
+				0,
+				0
 			],
-			"loop": false,
-			"fps": 24,
-			"anim": "singRIGHT-alt",
-			"indices": [],
-			"name": "Jumpscare"
-		},
-		{
-			"offsets": [
-				100,
-				110
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "singUP-alt",
-			"indices": [],
-			"name": "Jumpscare"
+			"anim": "idle",
+			"fps": 26,
+			"name": "Idle",
+			"indices": []
 		}
 	],
 	"no_antialiasing": false,
-	"image": "characters/Suicide_Mouse_Reanimated",
+	"image": "characters/pibbimouse_assets",
 	"position": [
-		80,
-		90
+		30,
+		-170
 	],
-	"healthicon": "really",
+	"healthicon": "pibbified",
 	"flip_x": false,
 	"healthbar_colors": [
-		8,
-		8,
-		8
+		0,
+		0,
+		0
 	],
 	"camera_position": [
-		-50,
-		-70
+		100,
+		230
 	],
 	"sing_duration": 6.1,
-	"scale": 1.2
+	"scale": 1
 }

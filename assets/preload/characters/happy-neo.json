@@ -1,80 +1,80 @@
 {
 	"animations": [
 		{
-			"loop": false,
 			"offsets": [
-				81,
-				-4
+				-6,
+				8
 			],
-			"anim": "singLEFT",
-			"fps": 24,
-			"name": "Happymouse Left",
-			"indices": []
+			"loop": false,
+			"fps": 20,
+			"anim": "singDOWN-alt",
+			"indices": [],
+			"name": "Happymouse Laugh0"
 		},
 		{
-			"loop": false,
 			"offsets": [
-				7,
-				-4
+				-14,
+				17
 			],
+			"loop": false,
+			"fps": 21,
 			"anim": "singDOWN",
-			"fps": 24,
-			"name": "Happymouse Down",
-			"indices": []
+			"indices": [],
+			"name": "Happymouse Down"
 		},
 		{
-			"loop": false,
-			"offsets": [
-				6,
-				160
-			],
-			"anim": "singUP",
-			"fps": 24,
-			"name": "Happymouse Up",
-			"indices": []
-		},
-		{
-			"loop": false,
-			"offsets": [
-				110,
-				1
-			],
-			"anim": "singRIGHT",
-			"fps": 24,
-			"name": "Happymouse Right",
-			"indices": []
-		},
-		{
-			"loop": false,
+			"loop": true,
 			"offsets": [
 				0,
 				0
 			],
 			"anim": "idle",
-			"fps": 24,
+			"fps": 26,
 			"name": "Happymouse Idle",
 			"indices": []
 		},
 		{
 			"loop": false,
 			"offsets": [
-				8,
-				1
+				-1,
+				-37
 			],
-			"anim": "singDOWN-alt",
-			"fps": 24,
-			"name": "Happymouse Laugh0",
+			"anim": "singLEFT",
+			"fps": 23,
+			"name": "Happymouse Left",
 			"indices": []
 		},
 		{
 			"loop": false,
 			"offsets": [
-				36,
-				0
+				-5,
+				8
 			],
 			"anim": "singRIGHT-alt",
-			"fps": 24,
+			"fps": 20,
 			"name": "Happymouse LaughA",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				8,
+				70
+			],
+			"anim": "singUP",
+			"fps": 22,
+			"name": "Happymouse Up",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				52,
+				-7
+			],
+			"anim": "singRIGHT",
+			"fps": 23,
+			"name": "Happymouse Right",
 			"indices": []
 		}
 	],

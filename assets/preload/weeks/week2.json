@@ -26,7 +26,7 @@
 			]
 		],
 		[
-			"Really Happy New",
+			"Really Happy Legacy",
 			"really",
 			[
 				15,
@@ -36,7 +36,7 @@
 		],
 		[
 			"A Fate Worse Than Death",
-			"happy",
+			"happy2",
 			[
 				75,
 				75,
@@ -50,6 +50,24 @@
 				126,
 				33,
 				175
+			]
+		],
+		[
+			"Really Darkened",
+			"pibbified",
+			[
+				35,
+				35,
+				35
+			]
+		],
+		[
+			"Cycles",
+			"altsadmouse",
+			[
+				155,
+				155,
+				155
 			]
 		]
 	],
