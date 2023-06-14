@@ -21,6 +21,8 @@ class Note extends FlxSprite
 {
 	public var extraData:Map<String,Dynamic> = [];
 
+	public var row:Int = 0;
+
 	public var strumTime:Float = 0;
 	public var mustPress:Bool = false;
 	public var noteData:Int = 0;
@@ -147,10 +149,18 @@ class Note extends FlxSprite
 					hitCausesMiss = true;
 
 				case 'Suicide Note':
-					ignoreNote = mustPress;
-					reloadNote('SUICIDE');
-					noteSplashTexture = 'SUICIDEsplash';
-					hitCausesMiss = true;
+					if(ClientPrefs.mechanics) {
+						reloadNote('SUICIDE');
+						noteSplashTexture = 'SUICIDEsplash';
+						ignoreNote = mustPress;
+						hitCausesMiss = true;
+					} else {
+						reloadNote('INVISIBLE');
+						noteSplashDisabled = true;
+						hitCausesMiss = false;
+						ignoreNote = true;
+						mustPress = false;
+					}
 
 				case 'Alt Animation':
 					animSuffix = '-alt';

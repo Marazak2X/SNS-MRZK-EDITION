@@ -81,6 +81,12 @@ class ControlsSubState extends MusicBeatSubstate {
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
 
+		if(options.OptionsSubState.mustPress)
+		{
+			bg.cameras = [PlayState.instance.camOptions];
+			grpOptions.cameras = [PlayState.instance.camOptions];
+		}
+
 		optionShit.push(['']);
 		optionShit.push([defaultKey]);
 
@@ -222,14 +228,33 @@ class ControlsSubState extends MusicBeatSubstate {
 			daStat12.visible = false;
 		}
 
-		var grain:FlxSprite = new FlxSprite(-318, -178);
-		grain.frames = Paths.getSparrowAtlas('grain');
-		grain.animation.addByPrefix('grain', 'pantalla', 24, true);
-		grain.scale.set(0.67, 0.67);
+		var grain:FlxSprite = new FlxSprite();
+		grain.frames = Paths.getSparrowAtlas('grainfix', 'mouse');
+		grain.animation.addByPrefix('grain', 'grain', 12, true);
+		grain.setGraphicSize(Std.int(grain.width * 1.25));
+		grain.screenCenter();
+		grain.antialiasing = ClientPrefs.globalAntialiasing;
         grain.scrollFactor.set(0, 0);
 		grain.animation.play('grain');
 		if(!ClientPrefs.lowQuality)
 			add(grain);
+
+		if(options.OptionsSubState.mustPress)
+		{
+			daStat1.cameras = [PlayState.instance.camOptions];
+			daStat2.cameras = [PlayState.instance.camOptions];
+			daStat3.cameras = [PlayState.instance.camOptions];
+			daStat4.cameras = [PlayState.instance.camOptions];
+			daStat5.cameras = [PlayState.instance.camOptions];
+			daStat6.cameras = [PlayState.instance.camOptions];
+			daStat7.cameras = [PlayState.instance.camOptions];
+			daStat8.cameras = [PlayState.instance.camOptions];
+			daStat9.cameras = [PlayState.instance.camOptions];
+			daStat10.cameras = [PlayState.instance.camOptions];
+			daStat11.cameras = [PlayState.instance.camOptions];
+			daStat12.cameras = [PlayState.instance.camOptions];
+			grain.cameras = [PlayState.instance.camOptions];
+		}
 
 		changeSelection();
 	}
@@ -407,6 +432,12 @@ class ControlsSubState extends MusicBeatSubstate {
 		text2.sprTracker = optionText;
 		grpInputsAlt.push(text2);
 		add(text2);
+
+		if(options.OptionsSubState.mustPress)
+		{
+			text1.cameras = [PlayState.instance.camOptions];
+			text2.cameras = [PlayState.instance.camOptions];
+		}
 	}
 
 	function reloadKeys() {
@@ -415,12 +446,22 @@ class ControlsSubState extends MusicBeatSubstate {
 			item.kill();
 			grpInputs.remove(item);
 			item.destroy();
+
+			if(options.OptionsSubState.mustPress)
+			{
+				item.cameras = [PlayState.instance.camOptions];
+			}
 		}
 		while(grpInputsAlt.length > 0) {
 			var item:AttachedText = grpInputsAlt[0];
 			item.kill();
 			grpInputsAlt.remove(item);
 			item.destroy();
+
+			if(options.OptionsSubState.mustPress)
+			{
+				item.cameras = [PlayState.instance.camOptions];
+			}
 		}
 
 		trace('Reloaded keys: ' + ClientPrefs.keyBinds);

@@ -293,14 +293,17 @@ class NoteOffsetState extends MusicBeatState
 		daStat12.alpha = 0.075;
 		add(daStat12);
 
-		grain = new FlxSprite(-318, -178);
-		grain.frames = Paths.getSparrowAtlas('grain');
-		grain.animation.addByPrefix('grain', 'pantalla', 24, true);
-		grain.scale.set(0.67, 0.67);
-        grain.cameras = [camOther];
+		var grain:FlxSprite = new FlxSprite();
+		grain.frames = Paths.getSparrowAtlas('grainfix', 'mouse');
+		grain.animation.addByPrefix('grain', 'grain', 12, true);
+		grain.setGraphicSize(Std.int(grain.width * 1.25));
+		grain.screenCenter();
+		grain.antialiasing = ClientPrefs.globalAntialiasing;
+        grain.scrollFactor.set(0, 0);
 		grain.animation.play('grain');
 		if(!ClientPrefs.lowQuality)
 			add(grain);
+		grain.cameras = [camOther];
 
 		Conductor.changeBPM(128.0);
 		FlxG.sound.playMusic(Paths.music('offsetSong'), 1, true);

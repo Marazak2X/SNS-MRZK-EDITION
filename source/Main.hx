@@ -6,17 +6,16 @@ import flixel.FlxGame;
 import flixel.FlxState;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
-import flixel.util.FlxTimer;
 import openfl.Assets;
 import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.display.StageScaleMode;
+import lime.app.Application;
 
 //crash handler stuff
 #if CRASH_HANDLER
-import lime.app.Application;
 import openfl.events.UncaughtErrorEvent;
 import haxe.CallStack;
 import haxe.io.Path;
@@ -26,16 +25,22 @@ import sys.io.File;
 import sys.io.Process;
 #end
 
-import CppAPI;
-
 using StringTools;
 
 class Main extends Sprite
 {
-	var game = {width: 1280, height: 720, initialState: TitleState, zoom: -1.0, framerate: 60, skipSplash: true, startFullscreen: false };
-	public static var fpsVar:FPS;
+	public static var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
+	public static var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
+	var initialState:Class<FlxState> = TitleState; // The FlxState the game starts with.
+	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
+	var framerate:Int = 60; // How many frames per second the game should run at.
+	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
+	var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
+	public static var infoCounter:FPS;
 	public static var appTitle:String = "Sunday Night Suicide': Mrzk Version";
-	public static var focusMusicTween:FlxTween;
+	final lowFps:Int = 20;
+
+	var focusMusicTween:FlxTween;
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
@@ -58,6 +63,33 @@ class Main extends Sprite
 		}
 	}
 
+	//From izzy Engine =)
+	function onWindowFocusOut()
+	{
+		trace("Game unfocused");
+
+		// Lower global volume when unfocused
+		if (focusMusicTween != null)
+			focusMusicTween.cancel();
+		focusMusicTween = FlxTween.tween(FlxG.sound, {volume: 0.3}, 0.5);
+
+		// Conserve power by lowering draw framerate when unfocuced
+		FlxG.drawFramerate = lowFps;
+	}
+
+	function onWindowFocusIn()
+	{
+		trace("Game focused");
+
+		// Normal global volume when focused
+		if (focusMusicTween != null)
+			focusMusicTween.cancel();
+		focusMusicTween = FlxTween.tween(FlxG.sound, {volume: 1.0}, 0.5);
+
+		// Bring framerate back when focused
+		FlxG.drawFramerate = framerate;
+	}
+
 	private function init(?E:Event):Void
 	{
 		if (hasEventListener(Event.ADDED_TO_STAGE))
@@ -73,144 +105,105 @@ class Main extends Sprite
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
 
-		if (game.zoom == -1.0)
+		if (zoom == -1)
 		{
-			var ratioX:Float = stageWidth / game.width;
-			var ratioY:Float = stageHeight / game.height;
-			game.zoom = Math.min(ratioX, ratioY);
-			game.width = Math.ceil(stageWidth / game.zoom);
-			game.height = Math.ceil(stageHeight / game.zoom);
+			var ratioX:Float = stageWidth / gameWidth;
+			var ratioY:Float = stageHeight / gameHeight;
+			zoom = Math.min(ratioX, ratioY);
+			gameWidth = Math.ceil(stageWidth / zoom);
+			gameHeight = Math.ceil(stageHeight / zoom);
 		}
-
-		#if cpp
-		CppAPI.darkMode();
-		#end
+	
 		ClientPrefs.loadDefaultKeys();
-		addChild(new FlxGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
+		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
 
 		#if !mobile
-		fpsVar = new FPS(10, 3, 0xFFFFFF);
-		addChild(fpsVar);
+		infoCounter = new FPS(10, 3, 0xE6E6E6);
+		addChild(infoCounter);
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
+		if(infoCounter != null) {
+			infoCounter.visible = ClientPrefs.showFPS;
+		}
 		#end
 
-		#if html5
+		FlxG.sound.muteKeys = null;
+		FlxG.sound.volumeUpKeys = null;
+		FlxG.sound.volumeDownKeys = null;
 		FlxG.autoPause = false;
-		FlxG.mouse.visible = false;
-		#end
+		FlxG.fixedTimestep = false;
+		FlxG.mouse.useSystemCursor = true;
+		FlxG.console.autoPause = false;
+		
+		// Add event listeners for window focus
+		Application.current.window.onFocusOut.add(onWindowFocusOut);
+		Application.current.window.onFocusIn.add(onWindowFocusIn);
 		
 		#if CRASH_HANDLER
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 		#end
-
-		Application.current.window.onFocusOut.add(onWindowFocusOut);
-		Application.current.window.onFocusIn.add(onWindowFocusIn);
-	}
-
-	var oldVol:Float = 1.0;
-	var newVol:Float = 0.3;
-
-	public static var focused:Bool = true;
-
-	// thx for ur code ari
-	function onWindowFocusOut()
-	{
-		focused = false;
-
-		// Lower global volume when unfocused
-		if (Type.getClass(FlxG.state) != PlayState) // imagine stealing my code smh
-		{
-			oldVol = FlxG.sound.volume;
-			if (oldVol > 0.3)
-			{
-				newVol = 0.3;
-			}
-			else
-			{
-				if (oldVol > 0.1)
-				{
-					newVol = 0.1;
-				}
-				else
-				{
-					newVol = 0;
-				}
-			}
-
-			trace("Game unfocused");
-
-			if (focusMusicTween != null)
-				focusMusicTween.cancel();
-			focusMusicTween = FlxTween.tween(FlxG.sound, {volume: newVol}, 0.5);
-
-			// Conserve power by lowering draw framerate when unfocuced
-			FlxG.drawFramerate = 60;
-		}
-	}
-
-	function onWindowFocusIn()
-	{
-		new FlxTimer().start(0.2, function(tmr:FlxTimer)
-		{
-			focused = true;
-		});
-
-		// Lower global volume when unfocused
-		if (Type.getClass(FlxG.state) != PlayState)
-		{
-			trace("Game focused");
-
-			// Normal global volume when focused
-			if (focusMusicTween != null)
-				focusMusicTween.cancel();
-
-			focusMusicTween = FlxTween.tween(FlxG.sound, {volume: oldVol}, 0.5);
-
-			// Bring framerate back when focused
-			FlxG.drawFramerate = 120;
-		}
 	}
 
 	// Code was entirely made by sqirra-rng for their fnf engine named "Izzy Engine", big props to them!!!
 	// very cool person for real they don't get enough credit for their work
 	#if CRASH_HANDLER
 	function onCrash(e:UncaughtErrorEvent):Void
-	{
-		var errMsg:String = "";
-		var path:String;
-		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
-		var dateNow:String = Date.now().toString();
-
-		dateNow = dateNow.replace(" ", "_");
-		dateNow = dateNow.replace(":", "'");
-
-		path = "./crash/" + "SNSMrzkVersion_" + dateNow + ".txt";
-
-		for (stackItem in callStack)
 		{
-			switch (stackItem)
+			var errMsg:String = "";
+			var path:String;
+			var callStack:Array<StackItem> = CallStack.exceptionStack(true);
+			var dateNow:String = Date.now().toString();
+	
+			dateNow = StringTools.replace(dateNow, " ", "_");
+			dateNow = StringTools.replace(dateNow, ":", "'");
+	
+			path = "./crash/" + "MouseAVI_" + dateNow + ".txt";
+	
+			errMsg = "Game Version: " + Lib.application.meta["version"] + "\n";
+	
+			for (stackItem in callStack)
 			{
-				case FilePos(s, file, line, column):
-					errMsg += file + " (line " + line + ")\n";
-				default:
-					Sys.println(stackItem);
+				switch (stackItem)
+				{
+					case FilePos(s, file, line, column):
+						errMsg += file + " (line " + line + ")\n";
+					default:
+						Sys.println(stackItem);
+				}
 			}
+	
+			errMsg += "\nUncaught Error: " + e.error + "\nReport the error here: h/'UNHERE'h/";
+	
+			if (!FileSystem.exists("./crash/"))
+				FileSystem.createDirectory("./crash/");
+	
+			File.saveContent(path, errMsg + "\n");
+	
+			Sys.println(errMsg);
+			Sys.println("Crash dump saved in " + Path.normalize(path));
+	
+			var crashDialoguePath:String = "Invisible";
+	
+			#if windows
+			crashDialoguePath += ".exe";
+			#end
+	
+			if (FileSystem.exists("./" + crashDialoguePath))
+			{
+				Sys.println("Found crash dialog: " + crashDialoguePath);
+	
+				#if linux
+				crashDialoguePath = "./" + crashDialoguePath;
+				#end
+				new Process(crashDialoguePath, [path]);
+			}
+			else
+			{
+				Sys.println("No crash dialog found! Making a simple alert instead...");
+				Application.current.window.alert(errMsg, "Error!");
+			}
+	
+			Sys.exit(1);
 		}
-
-		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/ShadowMario/FNF-PsychEngine\n\n> Crash Handler written by: sqirra-rng";
-
-		if (!FileSystem.exists("./crash/"))
-			FileSystem.createDirectory("./crash/");
-
-		File.saveContent(path, errMsg + "\n");
-
-		Sys.println(errMsg);
-		Sys.println("Crash dump saved in " + Path.normalize(path));
-
-		Application.current.window.alert(errMsg, "Error!");
-		DiscordClient.shutdown();
-		Sys.exit(1);
-	}
 	#end
 }

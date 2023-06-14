@@ -40,7 +40,7 @@ import lime.app.Application;
 import openfl.Assets;
 import openfl.Lib;
 import WindowsData;
-import CppAPI;
+#if cpp import CppAPI; #end
 
 using StringTools;
 typedef TitleData =
@@ -80,6 +80,8 @@ class TitleState extends MusicBeatState
 
 	var titleJSON:TitleData;
 
+	var staticGroup:FlxTypedGroup<FlxSprite>;
+
 	public static var updateVersion:String = '';
 
 	override public function create():Void
@@ -89,7 +91,9 @@ class TitleState extends MusicBeatState
 
 		Lib.application.window.title = Main.appTitle + " - " + "Title";
 
-        CppAPI.darkMode();
+        #if cpp
+		CppAPI.darkMode();
+		#end
 
 		#if LUA_ALLOWED
 		Paths.pushGlobalMods();
@@ -110,6 +114,153 @@ class TitleState extends MusicBeatState
 
 		swagShader = new ColorSwap();
 		super.create();
+
+		staticGroup = new FlxTypedGroup<FlxSprite>();
+		add(staticGroup);
+
+		var daStat:FlxSprite = new FlxSprite(0,0);
+		daStat.frames = Paths.getSparrowAtlas('daSTAT');
+		daStat.animation.addByPrefix('static','staticFLASH',24,true);
+		daStat.animation.play('static');
+        daStat.blend = BlendMode.SHADER;
+		daStat.scrollFactor.set(0, 0);
+		daStat.alpha = 0.0;
+		staticGroup.add(daStat);
+
+		var daStat2:FlxSprite = new FlxSprite(401,0);
+		daStat2.frames = Paths.getSparrowAtlas('daSTAT');
+		daStat2.animation.addByPrefix('static','staticFLASH',24,true);
+		daStat2.animation.play('static');
+		daStat2.scrollFactor.set(0, 0);
+        daStat2.blend = BlendMode.SHADER;
+		daStat2.alpha = 0.0;
+		staticGroup.add(daStat2);
+
+		var daStat3:FlxSprite = new FlxSprite(802,0);
+		daStat3.frames = Paths.getSparrowAtlas('daSTAT');
+		daStat3.animation.addByPrefix('static','staticFLASH',24,true);
+		daStat3.animation.play('static');
+		daStat3.scrollFactor.set(0, 0);
+		daStat3.alpha = 0.0;
+        daStat3.blend = BlendMode.SHADER;
+		staticGroup.add(daStat3);
+
+		var daStat4:FlxSprite = new FlxSprite(1203,0);
+		daStat4.frames = Paths.getSparrowAtlas('daSTAT');
+		daStat4.animation.addByPrefix('static','staticFLASH',24,true);
+		daStat4.animation.play('static');
+        daStat4.blend = BlendMode.SHADER;
+		daStat4.scrollFactor.set(0, 0);
+		daStat4.alpha = 0.0;
+		staticGroup.add(daStat4);
+
+		var daStat5:FlxSprite = new FlxSprite(0,299);
+		daStat5.frames = Paths.getSparrowAtlas('daSTAT');
+		daStat5.animation.addByPrefix('static','staticFLASH',24,true);
+		daStat5.animation.play('static');
+		daStat5.scrollFactor.set(0, 0);
+        daStat5.blend = BlendMode.SHADER;
+		daStat5.alpha = 0.0;
+		staticGroup.add(daStat5);
+
+		var daStat6:FlxSprite = new FlxSprite(401,299);
+		daStat6.frames = Paths.getSparrowAtlas('daSTAT');
+		daStat6.animation.addByPrefix('static','staticFLASH',24,true);
+		daStat6.animation.play('static');
+		daStat6.scrollFactor.set(0, 0);
+        daStat6.blend = BlendMode.SHADER;
+		daStat6.alpha = 0.0;
+		staticGroup.add(daStat6);
+
+		var daStat7:FlxSprite = new FlxSprite(802,299);
+		daStat7.frames = Paths.getSparrowAtlas('daSTAT');
+		daStat7.animation.addByPrefix('static','staticFLASH',24,true);
+		daStat7.animation.play('static');
+		daStat7.scrollFactor.set(0, 0);
+        daStat7.blend = BlendMode.SHADER;
+		daStat7.alpha = 0.0;
+		staticGroup.add(daStat7);
+
+		var daStat8:FlxSprite = new FlxSprite(1203,299);
+		daStat8.frames = Paths.getSparrowAtlas('daSTAT');
+		daStat8.animation.addByPrefix('static','staticFLASH',24,true);
+		daStat8.animation.play('static');
+		daStat8.scrollFactor.set(0, 0);
+        daStat8.blend = BlendMode.SHADER;
+		daStat8.alpha = 0.0;
+		staticGroup.add(daStat8);
+
+		var daStat9:FlxSprite = new FlxSprite(0,598);
+		daStat9.frames = Paths.getSparrowAtlas('daSTAT');
+		daStat9.animation.addByPrefix('static','staticFLASH',24,true);
+		daStat9.animation.play('static');
+        daStat9.blend = BlendMode.SHADER;
+		daStat9.scrollFactor.set(0, 0);
+		daStat9.alpha = 0.0;
+		staticGroup.add(daStat9);
+
+		var daStat10:FlxSprite = new FlxSprite(401,598);
+		daStat10.frames = Paths.getSparrowAtlas('daSTAT');
+		daStat10.animation.addByPrefix('static','staticFLASH',24,true);
+		daStat10.animation.play('static');
+        daStat10.blend = BlendMode.SHADER;
+		daStat10.scrollFactor.set(0, 0);
+		daStat10.alpha = 0;
+		daStat10.alpha = 0.0;
+		staticGroup.add(daStat10);
+
+		var daStat11:FlxSprite = new FlxSprite(802,598);
+		daStat11.frames = Paths.getSparrowAtlas('daSTAT');
+		daStat11.animation.addByPrefix('static','staticFLASH',24,true);
+		daStat11.animation.play('static');
+		daStat11.scrollFactor.set(0, 0);
+		daStat11.alpha = 0;
+        daStat11.blend = BlendMode.SHADER;
+		daStat11.alpha = 0.0;
+		staticGroup.add(daStat11);
+
+		var daStat12:FlxSprite = new FlxSprite(1203,598);
+		daStat12.frames = Paths.getSparrowAtlas('daSTAT');
+		daStat12.animation.addByPrefix('static','staticFLASH',24,true);
+		daStat12.animation.play('static');
+		daStat12.scrollFactor.set(0, 0);
+		daStat12.alpha = 0;
+        daStat12.blend = BlendMode.SHADER;
+		daStat12.alpha = 0.0;
+		staticGroup.add(daStat12);
+
+		if(!ClientPrefs.globalAntialiasing)
+		{
+			staticGroup.visible = false;
+		}
+
+		grain = new FlxSprite();
+		grain.frames = Paths.getSparrowAtlas('grainfix', 'mouse');
+		grain.animation.addByPrefix('grain', 'grain', 12, true);
+		grain.setGraphicSize(Std.int(grain.width * 1.25));
+		grain.screenCenter();
+		grain.alpha = 0;
+		grain.antialiasing = ClientPrefs.globalAntialiasing;
+        grain.scrollFactor.set(0, 0);
+		grain.animation.play('grain');
+		if(!ClientPrefs.lowQuality)
+			add(grain);
+
+		FlxTween.tween(grain, {alpha: 1}, 1);
+
+		//THE BIG ASS TWEENS
+		FlxTween.tween(daStat, {alpha: 0.075}, 1);
+		FlxTween.tween(daStat2, {alpha: 0.075}, 1);
+		FlxTween.tween(daStat3, {alpha: 0.075}, 1);
+		FlxTween.tween(daStat4, {alpha: 0.075}, 1);
+		FlxTween.tween(daStat5, {alpha: 0.075}, 1);
+		FlxTween.tween(daStat6, {alpha: 0.075}, 1);
+		FlxTween.tween(daStat7, {alpha: 0.075}, 1);
+		FlxTween.tween(daStat8, {alpha: 0.075}, 1);
+		FlxTween.tween(daStat9, {alpha: 0.075}, 1);
+		FlxTween.tween(daStat10, {alpha: 0.075}, 1);
+		FlxTween.tween(daStat11, {alpha: 0.075}, 1);
+		FlxTween.tween(daStat12, {alpha: 0.075}, 1);
 
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
@@ -166,6 +317,9 @@ class TitleState extends MusicBeatState
 			{
 				new FlxTimer().start(1, function(tmr:FlxTimer)
 				{
+					staticGroup.visible = false;
+					grain.visible = false;
+
 					startIntro();
 				});
 			}
@@ -174,10 +328,13 @@ class TitleState extends MusicBeatState
 	}
 
 	var logoBl:FlxSprite;
+	var newLogo:FlxSprite;
 	var gfDance:FlxSprite;
 	var danceLeft:Bool = false;
 	var titleText:FlxSprite;
 	var swagShader:ColorSwap = null;
+	var logoTween:FlxTween;
+	var grain:FlxSprite;
 
 	function startIntro()
 	{
@@ -227,7 +384,7 @@ class TitleState extends MusicBeatState
 
 		logoBl = new FlxSprite(titleJSON.titlex, titleJSON.titley);
 		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
-                logoBl.blend = BlendMode.ADD;
+        logoBl.blend = BlendMode.ADD;
 		logoBl.antialiasing = ClientPrefs.globalAntialiasing;
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24, false);
 		logoBl.animation.play('bump');
@@ -235,17 +392,24 @@ class TitleState extends MusicBeatState
 		// logoBl.screenCenter();
 		// logoBl.color = FlxColor.BLACK;
 
+		newLogo = new FlxSprite(titleJSON.titlex, titleJSON.titley).loadGraphic(Paths.image('logo'));
+		newLogo.updateHitbox();
+		newLogo.antialiasing = ClientPrefs.globalAntialiasing;
+		newLogo.blend = BlendMode.SHADER;
+		newLogo.scale.set(1.0, 1.0);
+
 		swagShader = new ColorSwap();
 		gfDance = new FlxSprite(titleJSON.gfx, titleJSON.gfy);
 		gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
-                gfDance.blend = BlendMode.ADD;
+        gfDance.blend = BlendMode.ADD;
 		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 		gfDance.antialiasing = ClientPrefs.globalAntialiasing;
 		add(gfDance);
 		//gfDance.shader = swagShader.shader;
 
-		add(logoBl);
+		//add(logoBl);
+		add(newLogo);
 		//logoBl.shader = swagShader.shader;
 
 		titleText = new FlxSprite(titleJSON.startx, titleJSON.starty);
@@ -291,109 +455,7 @@ class TitleState extends MusicBeatState
 		// titleText.screenCenter(X);
 		add(titleText);
 
-		var daStat1:FlxSprite = new FlxSprite(0,0);
-		daStat1.frames = Paths.getSparrowAtlas('daSTAT');
-		daStat1.animation.addByPrefix('static','staticFLASH',24,true);
-		daStat1.animation.play('static');
-		daStat1.scrollFactor.set(0, 0);
-		daStat1.alpha = 0.075;
-		add(daStat1);
-
-		var daStat2:FlxSprite = new FlxSprite(401,0);
-		daStat2.frames = Paths.getSparrowAtlas('daSTAT');
-		daStat2.animation.addByPrefix('static','staticFLASH',24,true);
-		daStat2.animation.play('static');
-		daStat2.scrollFactor.set(0, 0);
-		daStat2.alpha = 0.075;
-		add(daStat2);
-
-		var daStat3:FlxSprite = new FlxSprite(802,0);
-		daStat3.frames = Paths.getSparrowAtlas('daSTAT');
-		daStat3.animation.addByPrefix('static','staticFLASH',24,true);
-		daStat3.animation.play('static');
-		daStat3.scrollFactor.set(0, 0);
-		daStat3.alpha = 0.075;
-		add(daStat3);
-
-		var daStat4:FlxSprite = new FlxSprite(1203,0);
-		daStat4.frames = Paths.getSparrowAtlas('daSTAT');
-		daStat4.animation.addByPrefix('static','staticFLASH',24,true);
-		daStat4.animation.play('static');
-		daStat4.scrollFactor.set(0, 0);
-		daStat4.alpha = 0.075;
-		add(daStat4);
-
-		var daStat5:FlxSprite = new FlxSprite(0,299);
-		daStat5.frames = Paths.getSparrowAtlas('daSTAT');
-		daStat5.animation.addByPrefix('static','staticFLASH',24,true);
-		daStat5.animation.play('static');
-		daStat5.scrollFactor.set(0, 0);
-		daStat5.alpha = 0.075;
-		add(daStat5);
-
-		var daStat6:FlxSprite = new FlxSprite(401,299);
-		daStat6.frames = Paths.getSparrowAtlas('daSTAT');
-		daStat6.animation.addByPrefix('static','staticFLASH',24,true);
-		daStat6.animation.play('static');
-		daStat6.scrollFactor.set(0, 0);
-		daStat6.alpha = 0.075;
-		add(daStat6);
-
-		var daStat7:FlxSprite = new FlxSprite(802,299);
-		daStat7.frames = Paths.getSparrowAtlas('daSTAT');
-		daStat7.animation.addByPrefix('static','staticFLASH',24,true);
-		daStat7.animation.play('static');
-		daStat7.scrollFactor.set(0, 0);
-		daStat7.alpha = 0.075;
-		add(daStat7);
-
-		var daStat8:FlxSprite = new FlxSprite(1203,299);
-		daStat8.frames = Paths.getSparrowAtlas('daSTAT');
-		daStat8.animation.addByPrefix('static','staticFLASH',24,true);
-		daStat8.animation.play('static');
-		daStat8.scrollFactor.set(0, 0);
-		daStat8.alpha = 0.075;
-		add(daStat8);
-
-		var daStat9:FlxSprite = new FlxSprite(0,598);
-		daStat9.frames = Paths.getSparrowAtlas('daSTAT');
-		daStat9.animation.addByPrefix('static','staticFLASH',24,true);
-		daStat9.animation.play('static');
-		daStat9.scrollFactor.set(0, 0);
-		daStat9.alpha = 0.075;
-		add(daStat9);
-
-		var daStat10:FlxSprite = new FlxSprite(401,598);
-		daStat10.frames = Paths.getSparrowAtlas('daSTAT');
-		daStat10.animation.addByPrefix('static','staticFLASH',24,true);
-		daStat10.animation.play('static');
-		daStat10.scrollFactor.set(0, 0);
-		daStat10.alpha = 0.075;
-		add(daStat10);
-
-		var daStat11:FlxSprite = new FlxSprite(802,598);
-		daStat11.frames = Paths.getSparrowAtlas('daSTAT');
-		daStat11.animation.addByPrefix('static','staticFLASH',24,true);
-		daStat11.animation.play('static');
-		daStat11.scrollFactor.set(0, 0);
-		daStat11.alpha = 0.075;
-		add(daStat11);
-
-		var daStat12:FlxSprite = new FlxSprite(1203,598);
-		daStat12.frames = Paths.getSparrowAtlas('daSTAT');
-		daStat12.animation.addByPrefix('static','staticFLASH',24,true);
-		daStat12.animation.play('static');
-		daStat12.scrollFactor.set(0, 0);
-		daStat12.alpha = 0.075;
-		add(daStat12);
-
-		var logo:FlxSprite = new FlxSprite().loadGraphic(Paths.image('logo'));
-		logo.screenCenter();
-		logo.antialiasing = ClientPrefs.globalAntialiasing;
-		// add(logo);
-
 		// FlxTween.tween(logoBl, {y: logoBl.y + 50}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
-		// FlxTween.tween(logo, {y: logoBl.y + 50}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG, startDelay: 0.1});
 
 		credGroup = new FlxGroup();
 		add(credGroup);
@@ -419,6 +481,113 @@ class TitleState extends MusicBeatState
 
 		FlxTween.tween(credTextShit, {y: credTextShit.y + 20}, 2.9, {ease: FlxEase.quadInOut, type: PINGPONG});
 
+		var daStatc1:FlxSprite = new FlxSprite(0,0);
+		daStatc1.frames = Paths.getSparrowAtlas('daSTAT');
+		daStatc1.animation.addByPrefix('static','staticFLASH',24,true);
+		daStatc1.animation.play('static');
+		daStatc1.scrollFactor.set(0, 0);
+		daStatc1.alpha = 0.075;
+		add(daStatc1);
+
+		var daStatc2:FlxSprite = new FlxSprite(401,0);
+		daStatc2.frames = Paths.getSparrowAtlas('daSTAT');
+		daStatc2.animation.addByPrefix('static','staticFLASH',24,true);
+		daStatc2.animation.play('static');
+		daStatc2.scrollFactor.set(0, 0);
+		daStatc2.alpha = 0.075;
+		add(daStatc2);
+
+		var daStatc3:FlxSprite = new FlxSprite(802,0);
+		daStatc3.frames = Paths.getSparrowAtlas('daSTAT');
+		daStatc3.animation.addByPrefix('static','staticFLASH',24,true);
+		daStatc3.animation.play('static');
+		daStatc3.scrollFactor.set(0, 0);
+		daStatc3.alpha = 0.075;
+		add(daStatc3);
+
+		var daStatc4:FlxSprite = new FlxSprite(1203,0);
+		daStatc4.frames = Paths.getSparrowAtlas('daSTAT');
+		daStatc4.animation.addByPrefix('static','staticFLASH',24,true);
+		daStatc4.animation.play('static');
+		daStatc4.scrollFactor.set(0, 0);
+		daStatc4.alpha = 0.075;
+		add(daStatc4);
+
+		var daStatc5:FlxSprite = new FlxSprite(0,299);
+		daStatc5.frames = Paths.getSparrowAtlas('daSTAT');
+		daStatc5.animation.addByPrefix('static','staticFLASH',24,true);
+		daStatc5.animation.play('static');
+		daStatc5.scrollFactor.set(0, 0);
+		daStatc5.alpha = 0.075;
+		add(daStatc5);
+
+		var daStatc6:FlxSprite = new FlxSprite(401,299);
+		daStatc6.frames = Paths.getSparrowAtlas('daSTAT');
+		daStatc6.animation.addByPrefix('static','staticFLASH',24,true);
+		daStatc6.animation.play('static');
+		daStatc6.scrollFactor.set(0, 0);
+		daStatc6.alpha = 0.075;
+		add(daStatc6);
+
+		var daStatc7:FlxSprite = new FlxSprite(802,299);
+		daStatc7.frames = Paths.getSparrowAtlas('daSTAT');
+		daStatc7.animation.addByPrefix('static','staticFLASH',24,true);
+		daStatc7.animation.play('static');
+		daStatc7.scrollFactor.set(0, 0);
+		daStatc7.alpha = 0.075;
+		add(daStatc7);
+
+		var daStatc8:FlxSprite = new FlxSprite(1203,299);
+		daStatc8.frames = Paths.getSparrowAtlas('daSTAT');
+		daStatc8.animation.addByPrefix('static','staticFLASH',24,true);
+		daStatc8.animation.play('static');
+		daStatc8.scrollFactor.set(0, 0);
+		daStatc8.alpha = 0.075;
+		add(daStatc8);
+
+		var daStatc9:FlxSprite = new FlxSprite(0,598);
+		daStatc9.frames = Paths.getSparrowAtlas('daSTAT');
+		daStatc9.animation.addByPrefix('static','staticFLASH',24,true);
+		daStatc9.animation.play('static');
+		daStatc9.scrollFactor.set(0, 0);
+		daStatc9.alpha = 0.075;
+		add(daStatc9);
+
+		var daStatc10:FlxSprite = new FlxSprite(401,598);
+		daStatc10.frames = Paths.getSparrowAtlas('daSTAT');
+		daStatc10.animation.addByPrefix('static','staticFLASH',24,true);
+		daStatc10.animation.play('static');
+		daStatc10.scrollFactor.set(0, 0);
+		daStatc10.alpha = 0.075;
+		add(daStatc10);
+
+		var daStatc11:FlxSprite = new FlxSprite(802,598);
+		daStatc11.frames = Paths.getSparrowAtlas('daSTAT');
+		daStatc11.animation.addByPrefix('static','staticFLASH',24,true);
+		daStatc11.animation.play('static');
+		daStatc11.scrollFactor.set(0, 0);
+		daStatc11.alpha = 0.075;
+		add(daStatc11);
+
+		var daStatc12:FlxSprite = new FlxSprite(1203,598);
+		daStatc12.frames = Paths.getSparrowAtlas('daSTAT');
+		daStatc12.animation.addByPrefix('static','staticFLASH',24,true);
+		daStatc12.animation.play('static');
+		daStatc12.scrollFactor.set(0, 0);
+		daStatc12.alpha = 0.075;
+		add(daStatc12);
+
+		var grain1 = new FlxSprite();
+		grain1.frames = Paths.getSparrowAtlas('grainfix', 'mouse');
+		grain1.animation.addByPrefix('grain', 'grain', 12, true);
+		grain1.setGraphicSize(Std.int(grain1.width * 1.25));
+		grain1.screenCenter();
+		grain1.antialiasing = ClientPrefs.globalAntialiasing;
+        grain1.scrollFactor.set(0, 0);
+		grain1.animation.play('grain');
+		if(!ClientPrefs.lowQuality)
+			add(grain1);
+		
 		if (initialized)
 			skipIntro();
 		else
@@ -450,7 +619,9 @@ class TitleState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+		#if cpp
         CppAPI.darkMode();
+		#end
 
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
@@ -574,8 +745,17 @@ class TitleState extends MusicBeatState
 	{
 		super.beatHit();
 
-		if(logoBl != null)
-			logoBl.animation.play('bump', true);
+		if(logoTween != null) {
+		    logoTween.cancel();
+		}
+		newLogo.scale.x = 1.075;
+		newLogo.scale.y = 1.075;
+		logoTween = FlxTween.tween(newLogo.scale, {x: 1, y: 1}, 0.2, {
+		    onComplete: function(twn:FlxTween)
+		    {
+		        logoTween = null;
+		    }
+		});
 
 		if(gfDance != null) {
 			danceLeft = !danceLeft;
@@ -686,6 +866,8 @@ class TitleState extends MusicBeatState
 			}
 			else //Default! Edit this one!!
 			{
+				staticGroup.visible = false;
+				grain.visible = false;
 				remove(ngSpr);
 				remove(credGroup);
 				FlxG.camera.flash(FlxColor.BLACK, 4);

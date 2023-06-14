@@ -23,34 +23,33 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
+import options.*;
 import Controls;
-import WindowsData;
 
 using StringTools;
 
-class OptionsState extends MusicBeatState
+class OptionsSubState extends MusicBeatSubstate
 {
-	var options:Array<String> = ['Controls', 'Adjust Delay and Combo', 'Misc', 'Graphics', 'Visuals and UI', 'Gameplay'];
+	var options:Array<String> = ['Controls', 'Graphics', 'Visuals and UI', 'Misc', 'Gameplay'];
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
-
 	public static var isPause:Bool = false;
+	public static var mustPress:Bool = false;
+	var staticGroup:FlxTypedGroup<FlxSprite>;
 
 	function openSelectedSubstate(label:String) {
 		switch(label) {
-			case 'Misc':
-				openSubState(new options.MiscSubState());
 			case 'Controls':
-				openSubState(new options.ControlsSubState());
+				openSubState(new ControlsSubState());
 			case 'Graphics':
-				openSubState(new options.GraphicsSettingsSubState());
+				openSubState(new GraphicsSettingsSubState());
 			case 'Visuals and UI':
-				openSubState(new options.VisualsUISubState());
+				openSubState(new VisualsUISubState());
+			case 'Misc':
+				openSubState(new MiscSubState());
 			case 'Gameplay':
-				openSubState(new options.GameplaySettingsSubState());
-			case 'Adjust Delay and Combo':
-				LoadingState.loadAndSwitchState(new options.NoteOffsetState());
+				openSubState(new GameplaySettingsSubState());
 		}
 	}
 
@@ -58,19 +57,13 @@ class OptionsState extends MusicBeatState
 	var selectorRight:Alphabet;
 
 	override function create() {
-		#if desktop
-		DiscordClient.changePresence("Options Menu", null);
-		#end
-
-		openfl.Lib.application.window.title = Main.appTitle + ' - ' + 'Options';
-
-		if(isPause)
-			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+		staticGroup = new FlxTypedGroup<FlxSprite>();
+		add(staticGroup);
 
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.color = 0xffcfcfcf;
 		bg.updateHitbox();
-
+		bg.cameras = [PlayState.instance.camOptions];
 		bg.screenCenter();
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
@@ -82,13 +75,16 @@ class OptionsState extends MusicBeatState
 		{
 			var optionText:Alphabet = new Alphabet(0, 0, options[i], true);
 			optionText.screenCenter();
+			optionText.cameras = [PlayState.instance.camOptions];
 			optionText.y += (100 * (i - (options.length / 2))) + 50;
 			grpOptions.add(optionText);
 		}
 
 		selectorLeft = new Alphabet(0, 0, '>', true);
+		selectorLeft.cameras = [PlayState.instance.camOptions];
 		add(selectorLeft);
 		selectorRight = new Alphabet(0, 0, '<', true);
+		selectorRight.cameras = [PlayState.instance.camOptions];
 		add(selectorRight);
 
 		var daStat1:FlxSprite = new FlxSprite(0,0);
@@ -97,7 +93,7 @@ class OptionsState extends MusicBeatState
 		daStat1.animation.play('static');
 		daStat1.scrollFactor.set(0, 0);
 		daStat1.alpha = 0.075;
-		add(daStat1);
+		staticGroup.add(daStat1);
 
 		var daStat2:FlxSprite = new FlxSprite(401,0);
 		daStat2.frames = Paths.getSparrowAtlas('daSTAT');
@@ -105,7 +101,7 @@ class OptionsState extends MusicBeatState
 		daStat2.animation.play('static');
 		daStat2.scrollFactor.set(0, 0);
 		daStat2.alpha = 0.075;
-		add(daStat2);
+		staticGroup.add(daStat2);
 
 		var daStat3:FlxSprite = new FlxSprite(802,0);
 		daStat3.frames = Paths.getSparrowAtlas('daSTAT');
@@ -113,7 +109,7 @@ class OptionsState extends MusicBeatState
 		daStat3.animation.play('static');
 		daStat3.scrollFactor.set(0, 0);
 		daStat3.alpha = 0.075;
-		add(daStat3);
+		staticGroup.add(daStat3);
 
 		var daStat4:FlxSprite = new FlxSprite(1203,0);
 		daStat4.frames = Paths.getSparrowAtlas('daSTAT');
@@ -121,7 +117,7 @@ class OptionsState extends MusicBeatState
 		daStat4.animation.play('static');
 		daStat4.scrollFactor.set(0, 0);
 		daStat4.alpha = 0.075;
-		add(daStat4);
+		staticGroup.add(daStat4);
 
 		var daStat5:FlxSprite = new FlxSprite(0,299);
 		daStat5.frames = Paths.getSparrowAtlas('daSTAT');
@@ -129,7 +125,7 @@ class OptionsState extends MusicBeatState
 		daStat5.animation.play('static');
 		daStat5.scrollFactor.set(0, 0);
 		daStat5.alpha = 0.075;
-		add(daStat5);
+		staticGroup.add(daStat5);
 
 		var daStat6:FlxSprite = new FlxSprite(401,299);
 		daStat6.frames = Paths.getSparrowAtlas('daSTAT');
@@ -137,7 +133,7 @@ class OptionsState extends MusicBeatState
 		daStat6.animation.play('static');
 		daStat6.scrollFactor.set(0, 0);
 		daStat6.alpha = 0.075;
-		add(daStat6);
+		staticGroup.add(daStat6);
 
 		var daStat7:FlxSprite = new FlxSprite(802,299);
 		daStat7.frames = Paths.getSparrowAtlas('daSTAT');
@@ -145,7 +141,7 @@ class OptionsState extends MusicBeatState
 		daStat7.animation.play('static');
 		daStat7.scrollFactor.set(0, 0);
 		daStat7.alpha = 0.075;
-		add(daStat7);
+		staticGroup.add(daStat7);
 
 		var daStat8:FlxSprite = new FlxSprite(1203,299);
 		daStat8.frames = Paths.getSparrowAtlas('daSTAT');
@@ -153,7 +149,7 @@ class OptionsState extends MusicBeatState
 		daStat8.animation.play('static');
 		daStat8.scrollFactor.set(0, 0);
 		daStat8.alpha = 0.075;
-		add(daStat8);
+		staticGroup.add(daStat8);
 
 		var daStat9:FlxSprite = new FlxSprite(0,598);
 		daStat9.frames = Paths.getSparrowAtlas('daSTAT');
@@ -161,7 +157,7 @@ class OptionsState extends MusicBeatState
 		daStat9.animation.play('static');
 		daStat9.scrollFactor.set(0, 0);
 		daStat9.alpha = 0.075;
-		add(daStat9);
+		staticGroup.add(daStat9);
 
 		var daStat10:FlxSprite = new FlxSprite(401,598);
 		daStat10.frames = Paths.getSparrowAtlas('daSTAT');
@@ -169,7 +165,7 @@ class OptionsState extends MusicBeatState
 		daStat10.animation.play('static');
 		daStat10.scrollFactor.set(0, 0);
 		daStat10.alpha = 0.075;
-		add(daStat10);
+		staticGroup.add(daStat10);
 
 		var daStat11:FlxSprite = new FlxSprite(802,598);
 		daStat11.frames = Paths.getSparrowAtlas('daSTAT');
@@ -177,7 +173,7 @@ class OptionsState extends MusicBeatState
 		daStat11.animation.play('static');
 		daStat11.scrollFactor.set(0, 0);
 		daStat11.alpha = 0.075;
-		add(daStat11);
+		staticGroup.add(daStat11);
 
 		var daStat12:FlxSprite = new FlxSprite(1203,598);
 		daStat12.frames = Paths.getSparrowAtlas('daSTAT');
@@ -185,34 +181,31 @@ class OptionsState extends MusicBeatState
 		daStat12.animation.play('static');
 		daStat12.scrollFactor.set(0, 0);
 		daStat12.alpha = 0.075;
-		add(daStat12);
+		staticGroup.add(daStat12);
 
 		if(!ClientPrefs.globalAntialiasing)
 		{
-			daStat1.visible = false;
-			daStat2.visible = false;
-			daStat3.visible = false;
-			daStat4.visible = false;
-			daStat5.visible = false;
-			daStat6.visible = false;
-			daStat7.visible = false;
-			daStat8.visible = false;
-			daStat9.visible = false;
-			daStat10.visible = false;
-			daStat11.visible = false;
-			daStat12.visible = false;
+			staticGroup.visible = false;
 		}
+
+		staticGroup.cameras = [PlayState.instance.camOptions];
 
 		var grain:FlxSprite = new FlxSprite();
 		grain.frames = Paths.getSparrowAtlas('grainfix', 'mouse');
 		grain.animation.addByPrefix('grain', 'grain', 12, true);
 		grain.setGraphicSize(Std.int(grain.width * 1.25));
 		grain.screenCenter();
+		grain.cameras = [PlayState.instance.camOptions];
 		grain.antialiasing = ClientPrefs.globalAntialiasing;
         grain.scrollFactor.set(0, 0);
 		grain.animation.play('grain');
 		if(!ClientPrefs.lowQuality)
 			add(grain);
+
+		new FlxTimer().start(0.2, function(tmr:FlxTimer)
+		{
+			mustPress = true;
+		});
 
 		changeSelection();
 		ClientPrefs.saveSettings();
@@ -228,26 +221,26 @@ class OptionsState extends MusicBeatState
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (controls.UI_UP_P) {
-			changeSelection(-1);
-		}
-		if (controls.UI_DOWN_P) {
-			changeSelection(1);
-		}
-
-		if (controls.BACK) {
-			FlxG.sound.play(Paths.sound('cancelMenu'));
-			if(isPause) {
-				FlxG.sound.music.volume = 0;
-				isPause = false;
-				LoadingState.loadAndSwitchState(new PlayState());
-			} else {
-				MusicBeatState.switchState(new MainMenuState());
+		if(mustPress)
+		{
+			if (controls.UI_UP_P) {
+				changeSelection(-1);
 			}
-		}
-
-		if (controls.ACCEPT) {
-			openSelectedSubstate(options[curSelected]);
+			if (controls.UI_DOWN_P) {
+				changeSelection(1);
+			}
+	
+			if (controls.BACK) {
+				FlxG.sound.play(Paths.sound('cancelMenu'));
+				close();
+				mustPress = false;
+				PauseSubState.restartSong();
+				FlxG.sound.music.stop();
+			}
+	
+			if (controls.ACCEPT) {
+				openSelectedSubstate(options[curSelected]);
+			}
 		}
 	}
 	

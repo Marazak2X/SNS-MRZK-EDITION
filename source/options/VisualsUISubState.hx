@@ -47,6 +47,14 @@ class VisualsUISubState extends BaseOptionsMenu
 			'bool',
 			false);
 		addOption(option);
+
+		var option:Option = new Option('HUD Type:',
+		    'Change the HUD.',
+			'hudType',
+			'string',
+			'Mrzk HUD',
+			['Mrzk HUD', 'Default']);
+		addOption(option);
 		
 		var option:Option = new Option('Time Bar:',
 			"What should the Time Bar display?",
@@ -117,7 +125,7 @@ class VisualsUISubState extends BaseOptionsMenu
 		
 		#if !mobile
 		var option:Option = new Option('FPS Counter',
-			'If unchecked, hides FPS Counter.',
+			'If unchecked, hides FPS and Memory Counter.',
 			'showFPS',
 			'bool',
 			true);
@@ -157,15 +165,17 @@ class VisualsUISubState extends BaseOptionsMenu
 
 	override function destroy()
 	{
-		if(changedMusic) FlxG.sound.playMusic(Paths.music('freakyMenu'));
+		if(!options.OptionsSubState.mustPress)
+			if(changedMusic)
+				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 		super.destroy();
 	}
 
 	#if !mobile
 	function onChangeFPSCounter()
 	{
-		if(Main.fpsVar != null)
-			Main.fpsVar.visible = ClientPrefs.showFPS;
+		if(Main.infoCounter != null)
+			Main.infoCounter.visible = ClientPrefs.showFPS;
 	}
 	#end
 }

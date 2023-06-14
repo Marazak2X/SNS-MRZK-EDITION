@@ -34,11 +34,15 @@ class FreeplayState extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
 
+	var mustPress:Bool = false;
+
 	//other
 	var selector:FlxText;
 	private static var curSelected:Int = 0;
 	var curDifficulty:Int = -1;
 	private static var lastDifficultyName:String = '';
+
+	var iconHasChanged:Bool = false;
 
 	//the freeplay stuff
 	public static var instance:FreeplayState;
@@ -61,6 +65,18 @@ class FreeplayState extends MusicBeatState
 	private var iconArray:Array<HealthIcon> = [];
 
 	var shaders:Array<ShaderEffect> = [];
+
+	var songArray:Array<String> = [
+		'unhappy',
+		'happy',
+		'really happy',
+		'smile',
+		'really happy legacy',
+		'a fate worse than death',
+		'happy-neo',
+		'really darkened',
+		'cycles'
+	];
 
 	var bg:FlxSprite;
 	var intendedColor:Int;
@@ -108,6 +124,14 @@ class FreeplayState extends MusicBeatState
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
 		bg.screenCenter();
+
+		var blackSide:FlxSprite = new FlxSprite().loadGraphic(Paths.image('mainmenu/side'));
+		blackSide.scrollFactor.set(0, 0);
+		blackSide.updateHitbox();
+		blackSide.flipY = true;
+		blackSide.screenCenter();
+		blackSide.antialiasing = ClientPrefs.globalAntialiasing;
+		add(blackSide);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
@@ -291,10 +315,13 @@ class FreeplayState extends MusicBeatState
 			add(daStat12);
 		}
 
-		var grain:FlxSprite = new FlxSprite(-318, -177);
-		grain.frames = Paths.getSparrowAtlas('grain');
-		grain.animation.addByPrefix('grain', 'pantalla', 24, true);
-		grain.scale.set(0.67, 0.67);
+		var grain:FlxSprite = new FlxSprite();
+		grain.frames = Paths.getSparrowAtlas('grainfix', 'mouse');
+		grain.animation.addByPrefix('grain', 'grain', 12, true);
+		grain.setGraphicSize(Std.int(grain.width * 1.25));
+		grain.screenCenter();
+		grain.antialiasing = ClientPrefs.globalAntialiasing;
+        grain.scrollFactor.set(0, 0);
 		grain.animation.play('grain');
 		if(!ClientPrefs.lowQuality)
 			add(grain);
@@ -349,7 +376,7 @@ class FreeplayState extends MusicBeatState
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 		}
 
-		Lib.application.window.title = Main.appTitle + ' - ' + songs[curSelected].songName;
+		Lib.application.window.title = Main.appTitle + ' - ' + 'Freeplay' + ' - ' + songs[curSelected].songName;
 
 		if (chrom != null)
 			chrom.setChrome(chromeValue);
@@ -424,59 +451,80 @@ class FreeplayState extends MusicBeatState
 
 		if (controls.BACK)
 		{
-			persistentUpdate = false;
-			if(colorTween != null) {
-				colorTween.cancel();
+			if(mustPress)
+			{
+				persistentUpdate = false;
+				if(colorTween != null) {
+					colorTween.cancel();
+				}
+				FlxG.sound.play(Paths.sound('cancelMenu'));
+				if(FlxG.sound.music != null)
+				{
+					FlxG.sound.music.stop();
+				}
+				MusicBeatState.switchState(new MainMenuState());
 			}
-			FlxG.sound.play(Paths.sound('cancelMenu'));
-			MusicBeatState.switchState(new MainMenuState());
 		}
 
 		if(ctrl)
 		{
-			persistentUpdate = false;
-			openSubState(new GameplayChangersSubstate());
+			if(mustPress)
+			{
+				persistentUpdate = false;
+				openSubState(new GameplayChangersSubstate());
+			}
 		}
 		else if (accepted)
 		{
-			persistentUpdate = false;
-			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
-			var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
-			/*#if MODS_ALLOWED
-			if(!sys.FileSystem.exists(Paths.modsJson(songLowercase + '/' + poop)) && !sys.FileSystem.exists(Paths.json(songLowercase + '/' + poop))) {
-			#else
-			if(!OpenFlAssets.exists(Paths.json(songLowercase + '/' + poop))) {
-			#end
-				poop = songLowercase;
-				curDifficulty = 1;
-				trace('Couldnt find file');
-			}*/
-			trace(poop);
+			if(mustPress)
+			{
+				persistentUpdate = false;
+				var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
+				var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
+				/*#if MODS_ALLOWED
+				if(!sys.FileSystem.exists(Paths.modsJson(songLowercase + '/' + poop)) && !sys.FileSystem.exists(Paths.json(songLowercase + '/' + poop))) {
+				#else
+				if(!OpenFlAssets.exists(Paths.json(songLowercase + '/' + poop))) {
+				#end
+					poop = songLowercase;
+					curDifficulty = 1;
+					trace('Couldnt find file');
+				}*/
+				trace(poop);
+	
+				PlayState.SONG = Song.loadFromJson(poop, songLowercase);
+				PlayState.isStoryMode = false;
+				PlayState.storyDifficulty = curDifficulty;
+	
+				trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
+				if(colorTween != null) {
+					colorTween.cancel();
+				}
 
-			PlayState.SONG = Song.loadFromJson(poop, songLowercase);
-			PlayState.isStoryMode = false;
-			PlayState.storyDifficulty = curDifficulty;
-
-			trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
-			if(colorTween != null) {
-				colorTween.cancel();
+				var isCreator:Bool = true;
+				
+				if (FlxG.keys.pressed.SHIFT && isCreator) {
+					LoadingState.loadAndSwitchState(new ChartingState());
+				} else {
+					LoadingState.loadAndSwitchState(new PlayState());
+				}
+	
+				if(FlxG.sound.music != null)
+				{
+					FlxG.sound.music.stop();
+				}
+						
+				destroyFreeplayVocals();
 			}
-			
-			if (FlxG.keys.pressed.SHIFT){
-				LoadingState.loadAndSwitchState(new ChartingState());
-			}else{
-				LoadingState.loadAndSwitchState(new PlayState());
-			}
-
-			FlxG.sound.music.stop();
-					
-			destroyFreeplayVocals();
 		}
 		else if(controls.RESET)
 		{
-			persistentUpdate = false;
-			openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter));
-			FlxG.sound.play(Paths.sound('scrollMenu'));
+			if(mustPress)
+			{
+				persistentUpdate = false;
+				openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter));
+				FlxG.sound.play(Paths.sound('scrollMenu'));
+			}
 		}
 		super.update(elapsed);
 	}
@@ -539,6 +587,13 @@ class FreeplayState extends MusicBeatState
 			chromeValue = 0.0;
 		}
 
+		if (curSelected == 1 && iconHasChanged)
+		{
+			iconArray[curSelected].changeIcon('happy');
+		}
+
+		mustPress = false;
+
 		// selector.y = (70 * curSelected) + 30;
 
 		#if !switch
@@ -562,7 +617,13 @@ class FreeplayState extends MusicBeatState
 			{
 				FlxG.sound.music.stop();
 			}
-			FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
+
+			if(FlxG.sound.music != null)
+			{
+				FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0, false);
+			}
+
+			mustPress = true;
 			Conductor.changeBPM(Song.loadFromJson(songs[curSelected].songName.toLowerCase(), songs[curSelected].songName.toLowerCase()).bpm);
 		}, 1);
 		#else
@@ -656,18 +717,40 @@ class FreeplayState extends MusicBeatState
 		FlxG.camera.setFilters(newCamEffects);
 	}
 
+	override function stepHit()
+	{
+		super.stepHit();
+
+		if(songArray.contains(songs[curSelected].songName.toLowerCase()))
+		{
+			if (songs[curSelected].songName.toLowerCase() == 'happy')
+			{
+				if (curStep == 444 || curStep == 448)
+				{
+					iconArray[curSelected].changeIcon('happy2');
+					iconHasChanged = true;
+				}
+				else if(curStep == 445)
+				{
+					iconHasChanged = false;
+					iconArray[curSelected].changeIcon('happy');
+				}
+			}
+		}
+	}
+
 	override function beatHit()
 	{
 		super.beatHit();
 			
-		if (['unhappy', 'happy', 'really happy', 'smile', 'really happy new', 'a fate worse than death', 'happy-neo'].contains(songs[curSelected].songName.toLowerCase()))
+		if (songArray.contains(songs[curSelected].songName.toLowerCase()))
 		{
 			if(ClientPrefs.camZooms)
 			{
 				FlxG.camera.zoom += 0.015;
 				FlxTween.tween(FlxG.camera, { zoom: 1 }, 0.1);
 			}
-			if (songs[curSelected].songName.toLowerCase() == 'really happy new')
+			if (songs[curSelected].songName.toLowerCase() == 'really happy legacy')
 			{
 				if(ClientPrefs.shaking)
 				{
@@ -679,11 +762,23 @@ class FreeplayState extends MusicBeatState
 					FlxTween.tween(this, { chromeValue: 0 }, FlxG.random.float(0.05, 0.2), {ease: FlxEase.expoOut});
 				}
 			}
-			else if(songs[curSelected].songName.toLowerCase() == 'really happy')
+			if(songs[curSelected].songName.toLowerCase() == 'really happy')
 			{
 				if(ClientPrefs.shaders)
 				{
 					chromeValue += FlxG.random.float(0.02, 0.0865);
+					FlxTween.tween(this, { chromeValue: 0 }, FlxG.random.float(0.05, 0.2), {ease: FlxEase.expoOut});
+				}
+			}
+			if(songs[curSelected].songName.toLowerCase() == 'really darkened')
+			{
+				if(ClientPrefs.shaking)
+				{
+					FlxG.camera.shake(0.15, 0.075);
+				}
+				if(ClientPrefs.shaders)
+				{
+					chromeValue += FlxG.random.float(0.075, 0.175);
 					FlxTween.tween(this, { chromeValue: 0 }, FlxG.random.float(0.05, 0.2), {ease: FlxEase.expoOut});
 				}
 			}

@@ -15,7 +15,7 @@ import flixel.util.FlxColor;
 import flixel.FlxCamera;
 import flixel.util.FlxStringUtil;
 import openfl.Lib;
-import options.OptionsState;
+import options.OptionsSubState;
 import WindowsData;
 
 class PauseSubState extends MusicBeatSubstate
@@ -28,6 +28,7 @@ class PauseSubState extends MusicBeatSubstate
 		'Resume', 
 		'Restart Song', 
 		'Change Difficulty',
+		'Toggle Practice Mode',
 		'Options',
 		'Exit to menu'
 	];
@@ -114,7 +115,7 @@ class PauseSubState extends MusicBeatSubstate
 		blueballedTxt.updateHitbox();
 		add(blueballedTxt);
 
-		practiceText = new FlxText(20, 15 + 101, 0, "PRACTICE MODE", 32);
+		practiceText = new FlxText(20, 15 + 96, 0, "PRACTICE MODE", 32);
 		practiceText.scrollFactor.set();
 		practiceText.setFormat(Paths.font('vcr.ttf'), 32);
 		practiceText.x = FlxG.width - (practiceText.width + 20);
@@ -122,7 +123,74 @@ class PauseSubState extends MusicBeatSubstate
 		practiceText.visible = PlayState.instance.practiceMode;
 		add(practiceText);
 
-		var chartingText:FlxText = new FlxText(20, 15 + 101, 0, "CHARTING MODE", 32);
+		var leftKeys = ClientPrefs.keyBinds.get('note_left');
+
+		var leftNote:String = getKey(leftKeys[0]).toUpperCase() 
+		    + (!checkKey(getKey(leftKeys[0])) && !checkKey(getKey(leftKeys[1])) ? " " : "") 
+			+ getKey(leftKeys[1]).toUpperCase();
+
+		var downKeys = ClientPrefs.keyBinds.get('note_down');
+
+		var downNote:String = getKey(downKeys[0]).toUpperCase() 
+		    + (!checkKey(getKey(downKeys[0])) && !checkKey(getKey(downKeys[1])) ? " " : "") 
+			+ getKey(downKeys[1]).toUpperCase();
+
+		var upKeys = ClientPrefs.keyBinds.get('note_up');
+
+		var upNote:String = getKey(upKeys[0]).toUpperCase() 
+		    + (!checkKey(getKey(upKeys[0])) && !checkKey(getKey(upKeys[1])) ? " " : "") 
+			+ getKey(upKeys[1]).toUpperCase();
+
+		var rightKeys = ClientPrefs.keyBinds.get('note_right');
+
+		var rightNote:String = getKey(rightKeys[0]).toUpperCase() 
+		    + (!checkKey(getKey(rightKeys[0])) && !checkKey(getKey(rightKeys[1])) ? " " : "") 
+			+ getKey(rightKeys[1]).toUpperCase();
+
+		//var what:String = "NO";
+
+		var controlsText:FlxText = new FlxText(20, 15, 0, "", 32);
+		controlsText.scrollFactor.set();
+		controlsText.setFormat(Paths.font('vcr.ttf'), 32);
+		controlsText.updateHitbox();
+		controlsText.text = 'CONTROLS:';
+		add(controlsText);
+
+		var lText:FlxText = new FlxText(20, 15 + 32, 0, "", 32);
+		lText.scrollFactor.set();
+		lText.setFormat(Paths.font('vcr.ttf'), 32);
+		lText.updateHitbox();
+		lText.text = 'LEFT: $leftNote';
+		add(lText);
+
+		var dText:FlxText = new FlxText(20, 15 + 64, 0, "", 32);
+		dText.scrollFactor.set();
+		dText.setFormat(Paths.font('vcr.ttf'), 32);
+		dText.updateHitbox();
+		dText.text = 'DOWN: $downNote';
+		add(dText);
+
+		var uText:FlxText = new FlxText(20, 15 + 96, 0, "", 32);
+		uText.scrollFactor.set();
+		uText.setFormat(Paths.font('vcr.ttf'), 32);
+		uText.updateHitbox();
+		uText.text = 'UP: $upNote';
+		add(uText);
+
+		var rText:FlxText = new FlxText(20, 15 + 130, 0, "", 32);
+		rText.scrollFactor.set();
+		rText.setFormat(Paths.font('vcr.ttf'), 32);
+		rText.updateHitbox();
+		rText.text = 'RIGHT: $rightNote';
+		add(rText);
+
+		controlsText.alpha = 0;
+		lText.alpha = 0;
+		dText.alpha = 0;
+		uText.alpha = 0;
+		rText.alpha = 0;
+
+		var chartingText:FlxText = new FlxText(0, 15 + 101, 0, "CHARTING MODE", 32);
 		chartingText.scrollFactor.set();
 		chartingText.setFormat(Paths.font('vcr.ttf'), 32);
 		chartingText.x = FlxG.width - (chartingText.width + 20);
@@ -134,6 +202,8 @@ class PauseSubState extends MusicBeatSubstate
 		blueballedTxt.alpha = 0;
 		levelDifficulty.alpha = 0;
 		levelInfo.alpha = 0;
+		practiceText.alpha = 0;
+		chartingText.alpha = 0;
 
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
@@ -143,12 +213,32 @@ class PauseSubState extends MusicBeatSubstate
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
+		FlxTween.tween(practiceText, {alpha: 1}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.9});
+		FlxTween.tween(chartingText, {alpha: 1}, 0.4, {ease: FlxEase.quartInOut, startDelay: 1.1});
+		FlxTween.tween(controlsText, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
+		FlxTween.tween(lText, {alpha: 1, y: lText.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
+		FlxTween.tween(dText, {alpha: 1, y: dText.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
+		FlxTween.tween(uText, {alpha: 1, y: uText.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.9});
+		FlxTween.tween(rText, {alpha: 1, y: rText.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 1.1});
+
 
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		add(grpMenuShit);
 
 		regenMenu();
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+	}
+
+	function checkKey(s)
+	{
+		return !(s != null && s != '---');
+	}
+		
+	function getKey(t)
+	{
+		var s = InputFormatter.getKeyName(t);
+		
+		return checkKey(s) ? '' : s;
 	}
 
 	var holdTime:Float = 0;
@@ -271,12 +361,9 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.instance.botplayTxt.visible = PlayState.instance.cpuControlled;
 					PlayState.instance.botplayTxt.alpha = 1;
 					PlayState.instance.botplaySine = 0;
-				case 'Options':
-					PlayState.seenCutscene = false;
-					OptionsState.isPause = true;
-					Lib.application.window.title = Main.appTitle;
-					LoadingState.loadAndSwitchState(new OptionsState());
-					FlxG.sound.music.stop();
+				case "Options":
+					OptionsSubState.mustPress = false;
+					openSubState(new OptionsSubState());
 				case "Exit to menu":
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;

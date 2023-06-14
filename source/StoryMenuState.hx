@@ -195,6 +195,25 @@ class StoryMenuState extends MusicBeatState
 		add(scoreText);
 		add(txtWeekTitle);
 
+		if(ClientPrefs.newPlayer)
+		{
+			var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
+			textBG.alpha = 0.6;
+			add(textBG);
+	
+			#if PRELOAD_ALL
+			var leText:String = "Press CTRL to open the Gameplay Changers Menu | Press ACCEPT to start.";
+			var size:Int = 14;
+			#else
+			var leText:String = "Press CTRL to open the Gameplay Changers Menu | Press ACCEPT to start.";
+			var size:Int = 16;
+			#end
+			var text:FlxText = new FlxText(textBG.x, textBG.y + 4, FlxG.width, leText, size);
+			text.setFormat(Paths.font("snap.ttf"), size, FlxColor.WHITE, RIGHT);
+			text.scrollFactor.set();
+			add(text);
+		}
+
 		if(ClientPrefs.shaders)
 		{
 			chrom = new ChromaticAberrationEffect();
@@ -314,10 +333,13 @@ class StoryMenuState extends MusicBeatState
 			daStat12.visible = false;
 		}
 
-		var grain:FlxSprite = new FlxSprite(-318, -177);
-		grain.frames = Paths.getSparrowAtlas('grain');
-		grain.animation.addByPrefix('grain', 'pantalla', 24, true);
-		grain.scale.set(0.67, 0.67);
+		var grain:FlxSprite = new FlxSprite();
+		grain.frames = Paths.getSparrowAtlas('grainfix', 'mouse');
+		grain.animation.addByPrefix('grain', 'grain', 12, true);
+		grain.setGraphicSize(Std.int(grain.width * 1.25));
+		grain.screenCenter();
+		grain.antialiasing = ClientPrefs.globalAntialiasing;
+        grain.scrollFactor.set(0, 0);
 		grain.animation.play('grain');
 		if(!ClientPrefs.lowQuality)
 			add(grain);
@@ -405,7 +427,7 @@ class StoryMenuState extends MusicBeatState
 				if (ClientPrefs.shaking)
 					FlxG.camera.shake(0.008, 0.15);
 				if (ClientPrefs.flashing)
-					FlxG.camera.flash(FlxColor.fromString('0xFFFFFFFF'), 1, null, true);
+					FlxG.camera.flash(FlxColor.fromString('0xFFFFFF'), 1, null, true);
 
 				selectWeek();
 			}

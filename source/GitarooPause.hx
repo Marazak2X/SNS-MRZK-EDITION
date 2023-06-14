@@ -1,4 +1,4 @@
-package;
+/*package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -91,4 +91,4 @@ class GitarooPause extends MusicBeatState
 			replayButton.animation.curAnim.curFrame = 0;
 		}
 	}
-}
+}*/

@@ -88,6 +88,17 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		descText.borderSize = 2.4;
 		add(descText);
 
+		if(options.OptionsSubState.mustPress)
+		{
+			bg.cameras = [PlayState.instance.camOptions];
+			grpOptions.cameras = [PlayState.instance.camOptions];
+			grpTexts.cameras = [PlayState.instance.camOptions];
+			checkboxGroup.cameras = [PlayState.instance.camOptions];
+			descBox.cameras = [PlayState.instance.camOptions];
+			titleText.cameras = [PlayState.instance.camOptions];
+			descText.cameras = [PlayState.instance.camOptions];
+		}
+
 		for (i in 0...optionsArray.length)
 		{
 			var optionText:Alphabet = new Alphabet(290, 260, optionsArray[i].name, false);
@@ -234,14 +245,33 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			daStat12.visible = false;
 		}
 
-		var grain:FlxSprite = new FlxSprite(-318, -178);
-		grain.frames = Paths.getSparrowAtlas('grain');
-		grain.animation.addByPrefix('grain', 'pantalla', 24, true);
-		grain.scale.set(0.67, 0.67);
+		var grain:FlxSprite = new FlxSprite();
+		grain.frames = Paths.getSparrowAtlas('grainfix', 'mouse');
+		grain.animation.addByPrefix('grain', 'grain', 12, true);
+		grain.setGraphicSize(Std.int(grain.width * 1.25));
+		grain.screenCenter();
+		grain.antialiasing = ClientPrefs.globalAntialiasing;
         grain.scrollFactor.set(0, 0);
 		grain.animation.play('grain');
 		if(!ClientPrefs.lowQuality)
 			add(grain);
+
+		if(options.OptionsSubState.mustPress)
+		{
+			daStat1.cameras = [PlayState.instance.camOptions];
+			daStat2.cameras = [PlayState.instance.camOptions];
+			daStat3.cameras = [PlayState.instance.camOptions];
+			daStat4.cameras = [PlayState.instance.camOptions];
+			daStat5.cameras = [PlayState.instance.camOptions];
+			daStat6.cameras = [PlayState.instance.camOptions];
+			daStat7.cameras = [PlayState.instance.camOptions];
+			daStat8.cameras = [PlayState.instance.camOptions];
+			daStat9.cameras = [PlayState.instance.camOptions];
+			daStat10.cameras = [PlayState.instance.camOptions];
+			daStat11.cameras = [PlayState.instance.camOptions];
+			daStat12.cameras = [PlayState.instance.camOptions];
+			grain.cameras = [PlayState.instance.camOptions];
+		}
 
 		changeSelection();
 		reloadCheckboxes();
@@ -465,6 +495,11 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		boyfriend.dance();
 		insert(1, boyfriend);
 		boyfriend.visible = wasVisible;
+
+		if(options.OptionsSubState.mustPress)
+		{
+			boyfriend.cameras = [PlayState.instance.camOptions];
+		}
 	}
 
 	function reloadCheckboxes() {

@@ -11,6 +11,7 @@ class ClientPrefs {
 	public static var middleScroll:Bool = false;
 	public static var opponentStrums:Bool = true;
 	public static var showFPS:Bool = true;
+	public static var showMEM:Bool = true;
 	public static var shaking:Bool = true;
 	public static var flashing:Bool = true;
 	public static var globalAntialiasing:Bool = true;
@@ -21,14 +22,18 @@ class ClientPrefs {
 	public static var antiSpam:Bool = true;
 	public static var cursing:Bool = true;
 	public static var violence:Bool = true;
+	public static var fullscreen:Bool = false;
 	public static var camZooms:Bool = true;
+	public static var windowShake:Bool = true;
 	public static var iconsZoom:Bool = true;
+	public static var newPlayer:Bool = false;
 	public static var mechanics:Bool = true;
 	public static var hideHud:Bool = false;
 	public static var noteOffset:Int = 0;
 	public static var arrowHSV:Array<Array<Int>> = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
 	public static var ghostTapping:Bool = true;
 	public static var timeBarType:String = 'Time Elapsed';
+	public static var hudType:String = 'Mrzk HUD';
 	public static var scoreZoom:Bool = true;
 	public static var noReset:Bool = false;
 	public static var healthBarAlpha:Float = 1;
@@ -104,12 +109,17 @@ class ClientPrefs {
 		FlxG.save.data.middleScroll = middleScroll;
 		FlxG.save.data.opponentStrums = opponentStrums;
 		FlxG.save.data.showFPS = showFPS;
+		FlxG.save.data.fullscreen = fullscreen;
+		FlxG.save.data.showMEM = showMEM;
 		FlxG.save.data.flashing = flashing;
+		FlxG.save.data.newPlayer = newPlayer;
 		FlxG.save.data.antiSpam = antiSpam;
 		FlxG.save.data.globalAntialiasing = globalAntialiasing;
 		FlxG.save.data.noteSplashes = noteSplashes;
 		FlxG.save.data.lowQuality = lowQuality;
+		FlxG.save.data.hudType = hudType;
 		FlxG.save.data.shaders = shaders;
+		FlxG.save.data.windowShake = windowShake;
 		FlxG.save.data.framerate = framerate;
 		//FlxG.save.data.cursing = cursing;
 		//FlxG.save.data.violence = violence;
@@ -155,20 +165,29 @@ class ClientPrefs {
 		if(FlxG.save.data.middleScroll != null) {
 			middleScroll = FlxG.save.data.middleScroll;
 		}
+		if(FlxG.save.data.fullscreen != null) {
+			fullscreen = FlxG.save.data.fullscreen;
+		}
 		if(FlxG.save.data.opponentStrums != null) {
 			opponentStrums = FlxG.save.data.opponentStrums;
 		}
 		if(FlxG.save.data.showFPS != null) {
 			showFPS = FlxG.save.data.showFPS;
-			if(Main.fpsVar != null) {
-				Main.fpsVar.visible = showFPS;
-			}
 		}
 		if(FlxG.save.data.mechanics != null) {
 			mechanics = FlxG.save.data.mechanics;
 		}
+		if(FlxG.save.data.windowShake != null) {
+			windowShake = FlxG.save.data.windowShake;
+		}
+		if(FlxG.save.data.hudType != null) {
+			hudType = FlxG.save.data.hudType;
+		}
 		if(FlxG.save.data.laneAlpha != null) {
 			laneAlpha = FlxG.save.data.laneAlpha;
+		}
+		if(FlxG.save.data.newPlayer != null) {
+			newPlayer = FlxG.save.data.newPlayer;
 		}
 		if(FlxG.save.data.antiSpam != null) {
 			antiSpam = FlxG.save.data.antiSpam;
