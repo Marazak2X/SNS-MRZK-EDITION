@@ -1,10 +1,12 @@
-local allowCountdown = true;
+local allowCountdown = false;
 local isStart = false;
 
 function onStartCountdown()
-   if not allowCountdown then
+   if not allowCountdown and isStoryMode then
       doTweenAlpha('warnFade','warn',1,1);
       doTweenAlpha('pressFadeIn','pressTxt',1,2);
+      playMusic('warnScreenLoop',0.875,true);
+      isStart = true;
       return Function_Stop;
    end
    return Function_Continue;
@@ -32,14 +34,6 @@ end
 function onCreatePost()
    setProperty('introSoundsSuffix','');
    setProperty('isMouseStage',false);
-
-   if not isStoryMode then
-      isStart = false;
-      allowCountdown = true;
-   else
-      isStart = true;
-      allowCountdown = false;
-   end
 end
 
 function onSongStart()
@@ -92,6 +86,7 @@ function onUpdate()
       allowCountdown = true;
       cancelTween('pressFadeIn');
       cancelTween('pressFadeOut');
+      setPropertyFromClass('ClientPrefs','newPlayer',false);
       setProperty('pressTxt.alpha',0);
       playSound('click',0.95);
       runTimer('pressed',0.1);
@@ -193,22 +188,20 @@ end
 
 function itemFade(num, alph, duration)
    if num == 0 then
-      doTweenAlpha('itm1','timeBarBG',alph,duration,'linear')
-      doTweenAlpha('itm2','timeBar',alph,duration,'linear')
-      doTweenAlpha('itm3','timeTxt',alph,duration,'linear')
-      doTweenAlpha('itm4','botplayTxt',alph,duration,'linear')
-      doTweenAlpha('itm5','healthBarBG',alph,duration,'linear')
-      doTweenAlpha('itm55','healthBarBG2',alph,duration,'linear')
-      doTweenAlpha('itm6','healthBar',alph,duration,'linear')
-      doTweenAlpha('itm7','iconP1',alph,duration,'linear')
-      doTweenAlpha('itm8','iconP2',alph,duration,'linear')
-      doTweenAlpha('itm9','scoreTxt',alph,duration,'linear')
+      doTweenAlpha('itm1','camHUD',alph,duration,'linear')
    elseif num == 1 then
       doTweenAlpha('itm1','timeBarBG',alph,duration,'linear')
       doTweenAlpha('itm2','timeBar',alph,duration,'linear')
       doTweenAlpha('itm3','timeTxt',alph,duration,'linear')
       doTweenAlpha('itm4','botplayTxt',alph,duration,'linear')
       doTweenAlpha('itm9','scoreTxt',alph,duration,'linear')
+      doTweenAlpha('itm10','missesTxt',alph,duration);
+      doTweenAlpha('itm11','accuracyTxt',alph,duration);
+      doTweenAlpha('itm12','ratingTxt',alph,duration);
+      doTweenAlpha('itm13','sickTxt',alph,duration);
+      doTweenAlpha('itm14','goodTxt',alph,duration);
+      doTweenAlpha('itm15','badTxt',alph,duration);
+      doTweenAlpha('itm16','shitTxt',alph,duration);
    elseif num == 2 then
       doTweenAlpha('itm1','timeBarBG',alph,duration,'linear')
       doTweenAlpha('itm2','timeBar',alph,duration,'linear')

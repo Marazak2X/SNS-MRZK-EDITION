@@ -46,22 +46,20 @@ end
 
 function itemFade(num, alph, duration)
    if num == 0 then
-      doTweenAlpha('itm1','timeBarBG',alph,duration,'linear')
-      doTweenAlpha('itm2','timeBar',alph,duration,'linear')
-      doTweenAlpha('itm3','timeTxt',alph,duration,'linear')
-      doTweenAlpha('itm4','botplayTxt',alph,duration,'linear')
-      doTweenAlpha('itm5','healthBarBG',alph,duration,'linear')
-      doTweenAlpha('itm55','healthBarBG2',alph,duration,'linear')
-      doTweenAlpha('itm6','healthBar',alph,duration,'linear')
-      doTweenAlpha('itm7','iconP1',alph,duration,'linear')
-      doTweenAlpha('itm8','iconP2',alph,duration,'linear')
-      doTweenAlpha('itm9','scoreTxt',alph,duration,'linear')
+      doTweenAlpha('itm1','camHUD',alph,duration,'linear')
    elseif num == 1 then
       doTweenAlpha('itm1','timeBarBG',alph,duration,'linear')
       doTweenAlpha('itm2','timeBar',alph,duration,'linear')
       doTweenAlpha('itm3','timeTxt',alph,duration,'linear')
       doTweenAlpha('itm4','botplayTxt',alph,duration,'linear')
       doTweenAlpha('itm9','scoreTxt',alph,duration,'linear')
+      doTweenAlpha('itm10','missesTxt',alph,duration);
+      doTweenAlpha('itm11','accuracyTxt',alpha,duration);
+      doTweenAlpha('itm12','ratingTxt',alpha,duration);
+      doTweenAlpha('itm13','sickTxt',alpha,duration);
+      doTweenAlpha('itm14','goodTxt',alpha,duration);
+      doTweenAlpha('itm15','badTxt',alpha,duration);
+      doTweenAlpha('itm16','shitTxt',alpha,duration);
    elseif num == 2 then
       doTweenAlpha('itm1','timeBarBG',alph,duration,'linear')
       doTweenAlpha('itm2','timeBar',alph,duration,'linear')
